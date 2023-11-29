@@ -11,6 +11,7 @@
 		AD8A66282B16BB5000073D0E /* CurrencyConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8A66272B16BB5000073D0E /* CurrencyConvertView.swift */; };
 		AD8A662A2B16BB5300073D0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD8A66292B16BB5300073D0E /* Assets.xcassets */; };
 		AD8A662D2B16BB5300073D0E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD8A662C2B16BB5300073D0E /* Preview Assets.xcassets */; };
+		ADBFB7AF2B174903003B6A23 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ADBFB7AE2B174903003B6A23 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADBFB7AF2B174903003B6A23 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = "Currency Convert";
+			packageProductDependencies = (
+				ADBFB7AE2B174903003B6A23 /* Alamofire */,
+			);
 			productName = "Currency Convert";
 			productReference = AD8A66222B16BB5000073D0E /* Currency Convert.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +116,9 @@
 				Base,
 			);
 			mainGroup = AD8A66192B16BB5000073D0E;
+			packageReferences = (
+				ADBFB7AD2B174903003B6A23 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = AD8A66232B16BB5000073D0E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -346,6 +354,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ADBFB7AD2B174903003B6A23 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ADBFB7AE2B174903003B6A23 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADBFB7AD2B174903003B6A23 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AD8A661A2B16BB5000073D0E /* Project object */;
 }
