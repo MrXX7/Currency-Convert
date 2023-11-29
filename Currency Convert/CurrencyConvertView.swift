@@ -11,6 +11,7 @@ struct CurrencyConvertView: View {
     @State private var euroAmount = ""
     @State private var selectedCurrencyIndex = 0
     @State private var customExchangeRate = ""
+    @State private var isDarkMode = false
 
     let currencies = ["USD", "EUR", "GBP", "JPY", "TRY", "CAD", "CHF", "SAR"]
 
@@ -41,6 +42,24 @@ struct CurrencyConvertView: View {
 
     var body: some View {
         VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    // Toggle Dark Mode
+                    isDarkMode.toggle()
+                    // Apply Dark Mode
+                    if isDarkMode {
+                        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
+                    } else {
+                        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .light
+                    }
+                }) {
+                    Image(systemName: isDarkMode ? "moon.fill" : "moon")
+                        .foregroundColor(isDarkMode ? .yellow : .blue)
+                        .padding()
+                }
+            }
+
             TextField("Enter Euro Amount", text: $euroAmount)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.decimalPad)
@@ -73,6 +92,7 @@ struct CurrencyConvertView_Previews: PreviewProvider {
         CurrencyConvertView()
     }
 }
+
 
 
 
