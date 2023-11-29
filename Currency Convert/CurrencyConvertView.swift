@@ -29,8 +29,9 @@ struct CurrencyConvertView: View {
         // Convert the user-entered text to a decimal number using a NumberFormatter.
         let formatter = NumberFormatter()
         formatter.locale = Locale.current  // Use the user's locale.
+        formatter.decimalSeparator = ","
 
-        if let euroValue = formatter.number(from: euroAmount.replacingOccurrences(of: ",", with: "."))?.doubleValue {
+        if let euroValue = formatter.number(from: euroAmount)?.doubleValue {
             let selectedRate = exchangeRates[selectedCurrencyIndex]
             return euroValue * selectedRate
         } else {
@@ -72,6 +73,7 @@ struct CurrencyConvertView_Previews: PreviewProvider {
         CurrencyConvertView()
     }
 }
+
 
 
 
