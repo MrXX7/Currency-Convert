@@ -12,12 +12,13 @@ struct CurrencyConvertView: View {
     @State private var selectedCurrencyIndex = 0
     @State private var customExchangeRate = ""
 
-    let currencies = ["USD", "EUR", "GBP", "JPY", "TRY"]
+    let currencies = ["USD", "EUR", "GBP", "JPY", "TRY", "CAD", "CHF", "SAR"]
 
     var exchangeRates: [Double] {
-        var rates = [1.108, 1.0, 0.85, 135, 31.81]  //
+        var rates = [1.108, 1.0, 0.85, 135, 31.81, 1.28, 1.09, 4.18]  // Realistic exchange rates.
         
-        if let customRate = Double(customExchangeRate) {
+        // Manually entered exchange rate by the user.
+        if let customRate = Double(customExchangeRate.replacingOccurrences(of: ",", with: ".")) {
             rates[selectedCurrencyIndex] = customRate
         }
 
@@ -25,9 +26,16 @@ struct CurrencyConvertView: View {
     }
 
     var convertedAmount: Double {
-        let euroValue = Double(euroAmount) ?? 0
-        let selectedRate = exchangeRates[selectedCurrencyIndex]
-        return euroValue * selectedRate
+        // Convert the user-entered text to a decimal number using a NumberFormatter.
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current  // Use the user's locale.
+
+        if let euroValue = formatter.number(from: euroAmount.replacingOccurrences(of: ",", with: "."))?.doubleValue {
+            let selectedRate = exchangeRates[selectedCurrencyIndex]
+            return euroValue * selectedRate
+        } else {
+            return 0  // Return the default value if conversion fails.
+        }
     }
 
     var body: some View {
@@ -51,6 +59,7 @@ struct CurrencyConvertView: View {
             }
             .padding(.vertical, 8)
 
+            // Display the total amount with the appropriate currency.
             Text("Total Amount: \(convertedAmount, specifier: "%.2f") \(currencies[selectedCurrencyIndex])")
                 .padding()
         }
@@ -63,3 +72,6 @@ struct CurrencyConvertView_Previews: PreviewProvider {
         CurrencyConvertView()
     }
 }
+
+
+

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD8A66262B16BB5000073D0E /* Currency_ConvertApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8A66252B16BB5000073D0E /* Currency_ConvertApp.swift */; };
-		AD8A66282B16BB5000073D0E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8A66272B16BB5000073D0E /* ContentView.swift */; };
+		AD8A66282B16BB5000073D0E /* CurrencyConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8A66272B16BB5000073D0E /* CurrencyConvertView.swift */; };
 		AD8A662A2B16BB5300073D0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD8A66292B16BB5300073D0E /* Assets.xcassets */; };
 		AD8A662D2B16BB5300073D0E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD8A662C2B16BB5300073D0E /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,7 +16,7 @@
 /* Begin PBXFileReference section */
 		AD8A66222B16BB5000073D0E /* Currency Convert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Currency Convert.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD8A66252B16BB5000073D0E /* Currency_ConvertApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency_ConvertApp.swift; sourceTree = "<group>"; };
-		AD8A66272B16BB5000073D0E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AD8A66272B16BB5000073D0E /* CurrencyConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConvertView.swift; sourceTree = "<group>"; };
 		AD8A66292B16BB5300073D0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD8A662C2B16BB5300073D0E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,7 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				AD8A66252B16BB5000073D0E /* Currency_ConvertApp.swift */,
-				AD8A66272B16BB5000073D0E /* ContentView.swift */,
+				AD8A66272B16BB5000073D0E /* CurrencyConvertView.swift */,
 				AD8A66292B16BB5300073D0E /* Assets.xcassets */,
 				AD8A662B2B16BB5300073D0E /* Preview Content */,
 			);
@@ -137,7 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD8A66282B16BB5000073D0E /* ContentView.swift in Sources */,
+				AD8A66282B16BB5000073D0E /* CurrencyConvertView.swift in Sources */,
 				AD8A66262B16BB5000073D0E /* Currency_ConvertApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +280,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -309,6 +310,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
