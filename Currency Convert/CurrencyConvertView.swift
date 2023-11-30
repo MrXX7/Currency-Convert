@@ -55,6 +55,22 @@ struct CurrencyConvertView: View {
                 }
             }()
 
+        let automaticExchangeRates: [String] = currencies.map { currency in
+            let rate = exchangeRates[currency] ?? 0.0
+
+            let formatter = NumberFormatter()
+            formatter.minimumFractionDigits = 2
+            formatter.maximumFractionDigits = 4
+            formatter.numberStyle = .decimal
+
+            guard let formattedRate = formatter.string(from: NSNumber(value: rate)) else {
+                return "1€ = \(rate) \(currency)"
+            }
+
+            return "1€ = \(formattedRate) \(currency)"
+        }
+
+        
         return VStack {
             HStack {
                 Spacer()
@@ -80,7 +96,7 @@ struct CurrencyConvertView: View {
                     .keyboardType(.decimalPad)
                     .font(.title2)
                     .onTapGesture {
-                        // Kullanıcı ekranın herhangi bir yerine tıkladığında klavyeyi kapat
+                    // Resolve bug: DecimalPad now closes when tapping outside the text field.
                         UIApplication.shared.windows.first?.endEditing(true)
                     }
 
@@ -108,8 +124,18 @@ struct CurrencyConvertView: View {
             Text("Total Amount: \(convertedAmount, specifier: "%.2f") \(currencies[selectedCurrencyIndex])")
                 .padding()
                 .font(.title2)
-            Spacer()
+            
+            Divider()
+                .padding()
+            ForEach(automaticExchangeRates, id: \.self) { rate in
+                Text(rate)
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.bottom, 2) // A little padding between each automatic exchange rate
+            }
 
+            Spacer()
+            
             // Copyright Signature
             Text("© 2023 Öncü Can. All rights reserved.")
                 .font(.footnote)
