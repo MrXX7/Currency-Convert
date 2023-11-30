@@ -103,12 +103,20 @@ struct CurrencyConvertView: View {
             Text("Total Amount: \(convertedAmount, specifier: "%.2f") \(currencies[selectedCurrencyIndex])")
                 .padding()
                 .font(.title2)
+            Spacer()
+
+            // Copyright Signature
+            Text("© 2023 Öncü Can. All rights reserved.")
+                .font(.footnote)
+                .foregroundColor(.gray)
         }
         .padding()
+        
         .onAppear {
             // Fetch exchange rate information when the page appears.
             fetchExchangeRates()
         }
+        
     }
 }
 
