@@ -73,11 +73,16 @@ struct CurrencyConvertView: View {
                         .padding()
                 }
             }
+            Spacer()
 
             TextField("Enter Amount", text: $euroAmount)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.decimalPad)
-                .font(.title2)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.decimalPad)
+                    .font(.title2)
+                    .onTapGesture {
+                        // Kullanıcı ekranın herhangi bir yerine tıkladığında klavyeyi kapat
+                        UIApplication.shared.windows.first?.endEditing(true)
+                    }
 
             Picker("", selection: $selectedCurrencyIndex) {
                 ForEach(0..<currencies.count) {
