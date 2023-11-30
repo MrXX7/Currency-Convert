@@ -15,9 +15,9 @@ struct CurrencyConvertView: View {
     @State private var isDarkMode = false
     @State private var exchangeRates: [String: Double] = [:]
 
-    let currencies = ["USD", "EUR", "GBP", "JPY", "TRY", "CAD", "CHF", "SAR"]
+    let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD"]
 
-    // ARetrieve exchange rate information using the ExchangeRate-API endpoint URL along with an API Key
+    // Retrieve exchange rate information using the ExchangeRate-API endpoint URL along with an API Key
     func fetchExchangeRates() {
         let apiKey = "YOUR_API_KEY"
         let url = "https://open.er-api.com/v6/latest/\(currencies[selectedCurrencyIndex])?apikey=\(apiKey)"
@@ -33,19 +33,27 @@ struct CurrencyConvertView: View {
     }
 
     var body: some View {
-        let convertedAmount: Double = {
-            // Convert the user-entered text to a decimal number using a NumberFormatter.
-            let formatter = NumberFormatter()
-            formatter.locale = Locale.current  // Use the user's locale.
-            formatter.decimalSeparator = ","
-            
-            if let euroValue = formatter.number(from: euroAmount)?.doubleValue,
-               let selectedRate = exchangeRates[currencies[selectedCurrencyIndex]] {
-                return euroValue * selectedRate
-            } else {
-                return 0  // Return the default value if conversion fails.
-            }
-        }()
+            let convertedAmount: Double = {
+                // Convert the user-entered text to a decimal number using a NumberFormatter.
+                let formatter = NumberFormatter()
+                formatter.locale = Locale.current  // Use the user's locale.
+                formatter.decimalSeparator = ","
+                
+                if let euroValue = formatter.number(from: euroAmount)?.doubleValue {
+                    var selectedRate = exchangeRates[currencies[selectedCurrencyIndex]] ?? 0.0
+                    
+                    // Use the custom exchange rate if provided.
+                    if let customRate = formatter.number(from: customExchangeRate)?.doubleValue {
+                        selectedRate = customRate
+                    }
+                    
+                    // Use the selected rate for conversion.
+                    let convertedAmount = euroValue * selectedRate
+                    return convertedAmount
+                } else {
+                    return 0  // Return the default value if conversion fails.
+                }
+            }()
 
         return VStack {
             HStack {
@@ -69,6 +77,7 @@ struct CurrencyConvertView: View {
             TextField("Enter Amount", text: $euroAmount)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.decimalPad)
+                .font(.title2)
 
             Picker("", selection: $selectedCurrencyIndex) {
                 ForEach(0..<currencies.count) {
@@ -79,10 +88,12 @@ struct CurrencyConvertView: View {
 
             HStack {
                 Text("Exchange Rate:")
-                TextField("Enter Custom Rate", text: $customExchangeRate) {
+                    .font(.title2)
+                TextField("Enter Rate", text: $customExchangeRate) {
                     // Close Decimal
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
+                .font(.title2)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.decimalPad)
             }
@@ -91,6 +102,7 @@ struct CurrencyConvertView: View {
             // Display the total amount with the appropriate currency.
             Text("Total Amount: \(convertedAmount, specifier: "%.2f") \(currencies[selectedCurrencyIndex])")
                 .padding()
+                .font(.title2)
         }
         .padding()
         .onAppear {
