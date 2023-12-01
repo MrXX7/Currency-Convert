@@ -19,7 +19,8 @@ struct CurrencyConvertView: View {
 
     // Retrieve exchange rate information using the ExchangeRate-API endpoint URL along with an API Key
     func fetchExchangeRates() {
-        let apiKey = "YOUR_API_KEY"
+        let apiKey = "de15ae4ba4d18dfc91aac6f9def9c932"
+
         let url = "https://open.er-api.com/v6/latest/\(currencies[selectedCurrencyIndex])?apikey=\(apiKey)"
 
         AF.request(url).responseDecodable(of: ExchangeRatesResponse.self) { response in
