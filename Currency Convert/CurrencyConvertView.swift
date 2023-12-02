@@ -35,16 +35,18 @@ struct CurrencyConvertView: View {
 
     var body: some View {
         let resetButton: some View = {
-                    Button(action: {
-                        // Reset işlemi burada gerçekleşecek.
-                        euroAmount = ""
-                        customExchangeRate = ""
-                    }) {
-                        Image(systemName: "arrow.counterclockwise.circle.fill")
-                            .foregroundColor(Color(.systemRed))
-                            .padding()
-                    }
-                }()
+            Button(action: {
+                // Reset işlemi burada gerçekleşecek.
+                euroAmount = ""
+                customExchangeRate = ""
+            }) {
+                Image(systemName: "arrow.counterclockwise.circle.fill")
+                    .foregroundColor(Color(.systemOrange)) // Alternatif olarak turuncu bir renk
+                    .padding()
+            }
+        }()
+
+
         let convertedAmount: Double = {
             // Convert the user-entered text to a decimal number using a NumberFormatter.
             let formatter = NumberFormatter()
