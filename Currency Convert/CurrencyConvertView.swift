@@ -102,7 +102,7 @@ struct CurrencyConvertView: View {
                         .padding()
                 }
             }
-            Spacer()
+//            Spacer()
 
             TextField("Enter Amount", text: $euroAmount)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -130,6 +130,7 @@ struct CurrencyConvertView: View {
                 .font(.title2)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.decimalPad)
+                
             }
             .padding(.vertical, 8)
 
