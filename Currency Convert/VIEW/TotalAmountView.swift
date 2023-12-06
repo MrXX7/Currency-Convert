@@ -18,5 +18,8 @@ struct TotalAmountView: View {
                 .font(.title2)
             Spacer()
         }
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
 }

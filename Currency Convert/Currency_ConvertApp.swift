@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Currency_ConvertApp: App {
+    @AppStorage("isDarkMode") private var isDarkMode = true
+    
     var body: some Scene {
         WindowGroup {
-            CurrencyConvertView()
+            CurrencyConvertView(isDarkMode: $isDarkMode)
+                .preferredColorScheme(isDarkMode ? .dark : .light)
         }
     }
 }

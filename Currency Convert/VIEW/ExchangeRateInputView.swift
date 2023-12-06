@@ -22,6 +22,11 @@ struct ExchangeRateInputView: View {
             .keyboardType(.decimalPad)
         }
         .padding(.vertical, 8)
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
+    
 }
+
 

@@ -12,7 +12,7 @@ struct CurrencyConvertView: View {
     @State private var euroAmount = ""
     @State private var selectedCurrencyIndex = 0
     @State private var customExchangeRate = ""
-    @State private var isDarkMode = false
+    @Binding var isDarkMode: Bool
     @State private var exchangeRates: [String: Double] = [:]
 
     let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD"]
@@ -33,6 +33,8 @@ struct CurrencyConvertView: View {
                 Spacer()
                 DarkModeToggleButton(isDarkMode: $isDarkMode)
             }
+            .preferredColorScheme(isDarkMode ? .dark : .light)
+            
             AmountInputView(euroAmount: $euroAmount)
             CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
             ExchangeRateInputView(customExchangeRate: $customExchangeRate)
@@ -46,7 +48,7 @@ struct CurrencyConvertView: View {
             
             AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates)
             
-            Spacer()
+//            Spacer()
             
             // Copyright Signature
             Text("© 2023 Öncü Can. All rights reserved.")
@@ -59,15 +61,16 @@ struct CurrencyConvertView: View {
             ExchangeRateFetcher.fetchRates(apiKey: "de15ae4ba4d18dfc91aac6f9def9c932", selectedCurrencyIndex: selectedCurrencyIndex, currencies: currencies) { rates in
                 self.exchangeRates = rates
             }
+            
         }
     }
 }
 
-struct CurrencyConvertView_Previews: PreviewProvider {
-    static var previews: some View {
-        CurrencyConvertView()
-    }
-}
+//struct CurrencyConvertView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CurrencyConvertView(isDarkMode: $isdark)
+//    }
+//}
 
 
 

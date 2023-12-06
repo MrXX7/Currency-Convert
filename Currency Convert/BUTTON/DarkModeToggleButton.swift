@@ -13,16 +13,9 @@ struct DarkModeToggleButton: View {
     var body: some View {
         Button(action: {
             isDarkMode.toggle()
-
-            // Apply Dark Mode
-            if isDarkMode {
-                UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
-            } else {
-                UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .light
-            }
         }) {
             Image(systemName: isDarkMode ? "moon.fill" : "moon")
-                .foregroundColor(isDarkMode ? .yellow : .blue)
+                .foregroundColor(isDarkMode ? .blue : .yellow)
                 .padding()
         }
     }

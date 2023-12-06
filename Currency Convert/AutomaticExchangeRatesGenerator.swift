@@ -25,9 +25,7 @@ class AutomaticExchangeRatesGenerator {
                 print("Formatting Error for \(currency)")
                 return "1 \(flags[currency] ?? "") = \(rate) \(currency)"
             }
-            return "\(formattedRate) \(currency) \(flags[currency] ?? "")"
-
-
+            return "\(flags[currency] ?? "") \(currency) = \(formattedRate)"
 
         }
 
