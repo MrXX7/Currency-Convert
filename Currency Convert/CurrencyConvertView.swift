@@ -72,7 +72,6 @@ struct CurrencyConvertView: View {
         let automaticExchangeRates: [String] = currencies.compactMap { currency in
             print("Processing \(currency)")
             if currency.localizedCaseInsensitiveCompare("EUR") == .orderedSame {
-                print("Skipping Euro")
                 return nil
             }
 
@@ -122,9 +121,12 @@ struct CurrencyConvertView: View {
 
             Picker("", selection: $selectedCurrencyIndex) {
                 ForEach(0..<currencies.count) {
-                    Text(self.currencies[$0])
+                    if self.currencies[$0] != "EUR" {
+                        Text(self.currencies[$0])
+                    }
                 }
             }
+
             .pickerStyle(SegmentedPickerStyle())
 
             HStack {
@@ -144,7 +146,7 @@ struct CurrencyConvertView: View {
             // Display the total amount with the appropriate currency.
             HStack {
                 Text("Total Amount: \(convertedAmount, specifier: "%.2f") \(currencies[selectedCurrencyIndex])")
-                    .padding()
+                    .padding(.vertical)
                     .font(.title2)
                 Spacer()
                 resetButton
@@ -177,11 +179,6 @@ struct CurrencyConvertView: View {
         .onAppear {
             // Fetch exchange rate information when the page appears.
             fetchExchangeRates()
-            fetchExchangeRates()
-            print("Currencies: \(currencies)")
-            print("Exchange Rates: \(exchangeRates)")
-            print("Selected Currency Index: \(selectedCurrencyIndex)")
-
         }
     }
 }
