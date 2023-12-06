@@ -69,7 +69,13 @@ struct CurrencyConvertView: View {
             }
         }()
 
-        let automaticExchangeRates: [String] = currencies.map { currency in
+        let automaticExchangeRates: [String] = currencies.compactMap { currency in
+            print("Processing \(currency)")
+            if currency.localizedCaseInsensitiveCompare("EUR") == .orderedSame {
+                print("Skipping Euro")
+                return nil
+            }
+
             let rate = exchangeRates[currency] ?? 0.0
 
             let formatter = NumberFormatter()
@@ -78,6 +84,7 @@ struct CurrencyConvertView: View {
             formatter.numberStyle = .decimal
 
             guard let formattedRate = formatter.string(from: NSNumber(value: rate)) else {
+                print("Formatting Error for \(currency)")
                 return "1€ = \(rate) \(currency)"
             }
 
@@ -146,12 +153,17 @@ struct CurrencyConvertView: View {
             Divider()
                 .padding()
 
-            ForEach(automaticExchangeRates, id: \.self) { rate in
-                Text(rate)
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.bottom, 2) // A little padding between each automatic exchange rate
+            VStack(alignment: .leading, spacing: 2) {
+                ForEach(automaticExchangeRates, id: \.self) { rate in
+                    if rate.lowercased() != "EUR" {
+                        Text(rate)
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.bottom, 2)
+                    }
+                }
             }
+
 
             Spacer()
             
@@ -165,6 +177,11 @@ struct CurrencyConvertView: View {
         .onAppear {
             // Fetch exchange rate information when the page appears.
             fetchExchangeRates()
+            fetchExchangeRates()
+            print("Currencies: \(currencies)")
+            print("Exchange Rates: \(exchangeRates)")
+            print("Selected Currency Index: \(selectedCurrencyIndex)")
+
         }
     }
 }
