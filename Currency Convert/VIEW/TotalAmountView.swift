@@ -1,5 +1,5 @@
 //
-//  AmountInputView.swift
+//  TotalAmountView.swift
 //  Currency Convert
 //
 //  Created by Oncu Can on 6.12.2023.
