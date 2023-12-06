@@ -15,7 +15,7 @@ struct AutomaticExchangeRatesView: View {
             ForEach(automaticExchangeRates, id: \.self) { rate in
                 if rate.lowercased() != "euro" {
                     Text(rate)
-                        .font(.footnote)
+                        .font(.headline)
                         .foregroundColor(.gray)
                         .padding(.bottom, 2)
                 }

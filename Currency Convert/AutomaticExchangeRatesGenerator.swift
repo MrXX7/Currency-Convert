@@ -8,7 +8,7 @@
 import Foundation
 
 class AutomaticExchangeRatesGenerator {
-    static func generateRates(currencies: [String], exchangeRates: [String: Double]) -> [String] {
+    static func generateRates(currencies: [String], exchangeRates: [String: Double], flags: [String: String]) -> [String] {
         let automaticExchangeRates: [String] = currencies.compactMap { currency in
             if currency.localizedCaseInsensitiveCompare("EUR") == .orderedSame {
                 return nil
@@ -23,13 +23,23 @@ class AutomaticExchangeRatesGenerator {
 
             guard let formattedRate = formatter.string(from: NSNumber(value: rate)) else {
                 print("Formatting Error for \(currency)")
-                return "1€ = \(rate) \(currency)"
+                return "1 \(flags[currency] ?? "") = \(rate) \(currency)"
             }
+            return "\(formattedRate) \(currency) \(flags[currency] ?? "")"
 
-            return "1€ = \(formattedRate) \(currency)"
+
+
         }
 
         return automaticExchangeRates
     }
 }
+
+// Kullanım örneği:
+let currencies = ["USD", "GBP", "JPY"]
+let exchangeRates: [String: Double] = ["USD": 1.12, "GBP": 0.85, "JPY": 130.0]
+let flags: [String: String] = ["USD": "🇺🇸", "GBP": "🇬🇧", "JPY": "🇯🇵", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺"]
+
+let rates = AutomaticExchangeRatesGenerator.generateRates(currencies: currencies, exchangeRates: exchangeRates, flags: flags)
+
 
