@@ -15,7 +15,7 @@ struct CurrencyConvertView: View {
     @Binding var isDarkMode: Bool
     @State private var exchangeRates: [String: Double] = [:]
 
-    let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD"]
+    let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD", "CNY"]
 
 
     var body: some View {
@@ -58,17 +58,17 @@ struct CurrencyConvertView: View {
         .padding()
         
         .onAppear {
-            ExchangeRateFetcher.fetchRates(apiKey: "de15ae4ba4d18dfc91aac6f9def9c932", selectedCurrencyIndex: selectedCurrencyIndex, currencies: currencies) { rates in
+            ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedCurrencyIndex, currencies: currencies) { rates in
                 self.exchangeRates = rates
             }
             
         }
     }
 }
-
+//
 //struct CurrencyConvertView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        CurrencyConvertView(isDarkMode: $isdark)
+//        CurrencyConvertView()
 //    }
 //}
 

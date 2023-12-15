@@ -36,7 +36,7 @@ class AutomaticExchangeRatesGenerator {
 // Kullanım örneği:
 let currencies = ["USD", "GBP", "JPY"]
 let exchangeRates: [String: Double] = ["USD": 1.12, "GBP": 0.85, "JPY": 130.0]
-let flags: [String: String] = ["USD": "🇺🇸", "GBP": "🇬🇧", "JPY": "🇯🇵", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺"]
+let flags: [String: String] = ["USD": "🇺🇸", "GBP": "🇬🇧", "JPY": "🇯🇵", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"]
 
 let rates = AutomaticExchangeRatesGenerator.generateRates(currencies: currencies, exchangeRates: exchangeRates, flags: flags)
 
