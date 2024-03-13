@@ -16,6 +16,8 @@ struct ResetButton: View {
             // Reset işlemi burada gerçekleşecek.
             euroAmount = ""
             customExchangeRate = ""
+            let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
         }) {
             Image(systemName: "arrow.counterclockwise.circle.fill")
                 .foregroundColor(Color(.systemOrange)) // Alternatif olarak turuncu bir renk

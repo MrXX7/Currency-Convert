@@ -30,7 +30,7 @@ struct TotalAmountView: View {
                         animatedConvertedAmount = newValue
                     }
                 }
-                .scaleEffect(animatedConvertedAmount == 0 ? 0.5 : 1.0) // Animasyon sırasında metni küçült
+//                .scaleEffect(animatedConvertedAmount == 0 ? 0.5 : 1.0) Animasyon sırasında metni küçült
             Spacer()
         }
         .onTapGesture {
