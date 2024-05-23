@@ -1,24 +1,23 @@
 //
-//  CurrencyPickerView.swift
+//  ExchangeRatePickerView.swift
 //  Currency Convert
 //
-//  Created by Oncu Can on 6.12.2023.
+//  Created by Oncu Can on 23.05.2024.
 //
 
 import SwiftUI
 
-struct CurrencyPickerView: View {
+struct ExchangeRatePickerView: View {
     var currencies: [String]
-    @Binding var selectedCurrencyIndex: Int
+    @Binding var selectedRateCurrencyIndex: Int
 
     var body: some View {
-        Picker("", selection: $selectedCurrencyIndex) {
+        Picker("Select Currency", selection: $selectedRateCurrencyIndex) {
             ForEach(0..<currencies.count, id: \.self) {
                 Text(self.currencies[$0])
             }
         }
         .pickerStyle(SegmentedPickerStyle())
+        .padding()
     }
 }
-
-

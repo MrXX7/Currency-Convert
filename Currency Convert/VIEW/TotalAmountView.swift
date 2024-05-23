@@ -19,24 +19,22 @@ struct TotalAmountView: View {
                 .padding(.vertical)
                 .font(.title2)
                 .onAppear {
-                    // İlk kez göründüğünde animasyonu başlat
                     withAnimation(.spring()) {
                         animatedConvertedAmount = convertedAmount
                     }
                 }
                 .onChange(of: convertedAmount) { newValue in
-                    // Değer değiştiğinde animasyonu başlat
                     withAnimation(.spring()) {
                         animatedConvertedAmount = newValue
                     }
                 }
-//                .scaleEffect(animatedConvertedAmount == 0 ? 0.5 : 1.0) Animasyon sırasında metni küçült
             Spacer()
         }
         .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            UIApplication.shared.windows.first?.endEditing(true)
         }
     }
 }
+
 
 

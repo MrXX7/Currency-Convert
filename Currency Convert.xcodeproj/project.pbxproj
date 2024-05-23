@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD01A2672BFFE03D00720E44 /* ExchangeRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */; };
 		AD3250642B20E1E30024E2DF /* ExchangeRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3250632B20E1E30024E2DF /* ExchangeRates.swift */; };
 		AD3250662B20E2590024E2DF /* DarkModeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3250652B20E2590024E2DF /* DarkModeToggleButton.swift */; };
 		AD3250682B20E4A60024E2DF /* AmountInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3250672B20E4A60024E2DF /* AmountInputView.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRatePickerView.swift; sourceTree = "<group>"; };
 		AD3250632B20E1E30024E2DF /* ExchangeRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRates.swift; sourceTree = "<group>"; };
 		AD3250652B20E2590024E2DF /* DarkModeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeToggleButton.swift; sourceTree = "<group>"; };
 		AD3250672B20E4A60024E2DF /* AmountInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountInputView.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				AD32506B2B20E6560024E2DF /* ExchangeRateInputView.swift */,
 				AD32506E2B20E7170024E2DF /* TotalAmountView.swift */,
 				AD3250702B20E82D0024E2DF /* AutomaticExchangeRatesView.swift */,
+				AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */,
 			);
 			path = VIEW;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				AD3250662B20E2590024E2DF /* DarkModeToggleButton.swift in Sources */,
 				AD8A66262B16BB5000073D0E /* Currency_ConvertApp.swift in Sources */,
 				AD3250752B20EA070024E2DF /* AmountConverter.swift in Sources */,
+				AD01A2672BFFE03D00720E44 /* ExchangeRatePickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

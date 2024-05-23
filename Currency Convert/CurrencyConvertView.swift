@@ -14,19 +14,15 @@ struct CurrencyConvertView: View {
     @State private var customExchangeRate = ""
     @Binding var isDarkMode: Bool
     @State private var exchangeRates: [String: Double] = [:]
+    @State private var selectedRateCurrencyIndex = 0
 
     let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD", "CNY"]
-
+    let flags: [String: String] = ["EUR": "🇪🇺","USD": "🇺🇸", "GBP": "🇬🇧", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"]
 
     var body: some View {
-        let exchangeRateFetcher = ExchangeRateFetcher()
-        
-        ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate)
-        
-        
         let convertedAmount = AmountConverter.convertAmount(euroAmount: euroAmount, customExchangeRate: customExchangeRate, selectedCurrencyIndex: selectedCurrencyIndex, exchangeRates: exchangeRates, currencies: currencies)
         
-        let automaticExchangeRates = AutomaticExchangeRatesGenerator.generateRates(currencies: currencies, exchangeRates: exchangeRates, flags: flags)
+        let automaticExchangeRates = AutomaticExchangeRatesGenerator.generateRates(currencies: currencies, exchangeRates: exchangeRates, flags: flags, baseCurrency: currencies[selectedRateCurrencyIndex])
         
         return VStack {
             HStack {
@@ -37,41 +33,39 @@ struct CurrencyConvertView: View {
             
             AmountInputView(euroAmount: $euroAmount)
             CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
-            ExchangeRateInputView(customExchangeRate: $customExchangeRate)
+            if selectedCurrencyIndex != 0 { // Show exchange rate input if not EUR
+                ExchangeRateInputView(customExchangeRate: $customExchangeRate)
+            }
             HStack {
                 TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
                 ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate)
-                
             }
             Divider()
                 .padding()
             
-            AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates)
+            ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
             
-//            Spacer()
+            AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
             
-            // Copyright Signature
             Text("© 2023 Öncü Can. All rights reserved.")
                 .font(.footnote)
                 .foregroundColor(.gray)
         }
         .padding()
-        
         .onAppear {
-            ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedCurrencyIndex, currencies: currencies) { rates in
-                self.exchangeRates = rates
-            }
-            
+            fetchExchangeRates()
+        }
+        .onChange(of: selectedRateCurrencyIndex) { _ in
+            fetchExchangeRates()
+        }
+    }
+    
+    private func fetchExchangeRates() {
+        ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedRateCurrencyIndex, currencies: currencies) { rates in
+            self.exchangeRates = rates
         }
     }
 }
-//
-//struct CurrencyConvertView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CurrencyConvertView()
-//    }
-//}
-
 
 
 

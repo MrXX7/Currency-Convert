@@ -14,7 +14,6 @@ class ExchangeRateFetcher {
 
         AF.request(url).responseDecodable(of: ExchangeRatesResponse.self) { response in
             guard let rates = response.value?.rates else {
-                // Handle error or return an empty dictionary
                 print("Error fetching exchange rates")
                 return
             }
@@ -25,8 +24,4 @@ class ExchangeRateFetcher {
         }
     }
 }
-
-// Example usage:
-let apiKey = "bdb3c5b7f1a64792427d2f13"
-let selectedCurrencyIndex = 0 // Replace with the desired index
 
