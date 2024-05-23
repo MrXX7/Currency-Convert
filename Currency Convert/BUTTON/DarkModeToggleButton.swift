@@ -15,7 +15,7 @@ struct DarkModeToggleButton: View {
             isDarkMode.toggle()
         }) {
             Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
-                .font(.title)
+                .font(.title2)
                 .foregroundColor(isDarkMode ? .yellow : .blue)
         }
     }

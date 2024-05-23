@@ -33,9 +33,9 @@ struct CurrencyConvertView: View {
             
             AmountInputView(euroAmount: $euroAmount)
             CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
-            if selectedCurrencyIndex != 0 { // Show exchange rate input if not EUR
-                ExchangeRateInputView(customExchangeRate: $customExchangeRate)
-            }
+            //            if selectedCurrencyIndex != 0 { // Show exchange rate input if not EUR
+            ExchangeRateInputView(customExchangeRate: $customExchangeRate)
+            //            }
             HStack {
                 TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
                 ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate)

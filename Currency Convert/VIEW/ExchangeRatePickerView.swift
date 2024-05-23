@@ -15,9 +15,9 @@ struct ExchangeRatePickerView: View {
         Picker("Select Currency", selection: $selectedRateCurrencyIndex) {
             ForEach(0..<currencies.count, id: \.self) {
                 Text(self.currencies[$0])
+                    .padding()
             }
         }
         .pickerStyle(SegmentedPickerStyle())
-        .padding()
     }
 }
