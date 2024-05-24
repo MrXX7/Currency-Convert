@@ -10,18 +10,22 @@ import SwiftUI
 struct ResetButton: View {
     @Binding var euroAmount: String
     @Binding var customExchangeRate: String
+    @Binding var selectedCurrencyIndex: Int
+    @Binding var selectedRateCurrencyIndex: Int
 
     var body: some View {
         Button(action: {
-            // Reset işlemi burada gerçekleşecek.
             euroAmount = ""
             customExchangeRate = ""
+            selectedCurrencyIndex = 0
+            selectedRateCurrencyIndex = 0
             let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
+            generator.impactOccurred()
         }) {
             Image(systemName: "arrow.counterclockwise.circle.fill")
-                .foregroundColor(Color(.systemOrange)) // Alternatif olarak turuncu bir renk
+                .foregroundColor(Color(.systemOrange))
                 .padding()
         }
     }
 }
+

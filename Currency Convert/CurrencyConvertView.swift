@@ -59,7 +59,7 @@ struct CurrencyConvertView: View {
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
                     HStack {
                         TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
-                        ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate)
+                        ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate, selectedCurrencyIndex: $selectedCurrencyIndex, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     }
                     Divider()
                         .padding()
@@ -92,6 +92,7 @@ struct CurrencyConvertView: View {
         }
     }
 }
+
 
 
 
