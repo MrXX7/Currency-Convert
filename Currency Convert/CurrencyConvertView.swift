@@ -39,8 +39,10 @@ struct CurrencyConvertView: View {
 
     let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD", "CNY"]
     let flags: [String: String] = ["EUR": "🇪🇺", "USD": "🇺🇸", "GBP": "🇬🇧", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"]
+    let quickAmounts: [String] = ["1", "5", "10", "25", "50", "100"]
 
     var body: some View {
+        
         let convertedAmount = AmountConverter.convertAmount(euroAmount: euroAmount, customExchangeRate: customExchangeRate, selectedCurrencyIndex: selectedCurrencyIndex, exchangeRates: exchangeRates, currencies: currencies)
         
         let automaticExchangeRates = AutomaticExchangeRatesGenerator.generateRates(currencies: currencies, exchangeRates: exchangeRates, flags: flags, baseCurrency: currencies[selectedRateCurrencyIndex])
@@ -54,6 +56,7 @@ struct CurrencyConvertView: View {
                     }
                     .preferredColorScheme(isDarkMode ? .dark : .light)
                     
+                    QuickAmountButtonsView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
                     AmountInputView(euroAmount: $euroAmount)
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
@@ -86,12 +89,12 @@ struct CurrencyConvertView: View {
         }
     }
     
-    private func fetchExchangeRates() {
-        ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedRateCurrencyIndex, currencies: currencies) { rates in
-            self.exchangeRates = rates
+        private func fetchExchangeRates() {
+                ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedRateCurrencyIndex, currencies: currencies) { rates in
+                    self.exchangeRates = rates
+                }
+            }
         }
-    }
-}
 
 
 
