@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Alamofire
 import Combine
 
 final class KeyboardResponder: ObservableObject {
@@ -43,12 +42,12 @@ struct CurrencyConvertView: View {
     let quickAmounts: [String] = ["1", "5", "10", "25", "50", "100", "200", "500"]
     
     private func formatAmount(_ amount: String) -> String {
-            if let doubleValue = Double(amount), doubleValue.truncatingRemainder(dividingBy: 1) == 0 {
-                return String(format: "%.0f EUR", doubleValue)
-            } else {
-                return "\(amount) EUR"
-            }
+        if let doubleValue = Double(amount), doubleValue.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(format: "%.0f EUR", doubleValue)
+        } else {
+            return "\(amount) EUR"
         }
+    }
 
     var body: some View {
         
@@ -85,9 +84,10 @@ struct CurrencyConvertView: View {
                         .foregroundColor(.gray)
                 }
                 .padding()
+                .frame(minWidth: geometry.size.width * 0.9) // Adjust this value to balance left and right padding
                 .frame(minHeight: geometry.size.height)
-                .padding(.bottom, keyboard.currentHeight) // Klavye yüksekliğine göre alttan padding ekle
-                .animation(.easeOut(duration: 0.16)) // Görsel geçiş ekle
+                .padding(.bottom, keyboard.currentHeight) // Add bottom padding based on keyboard height
+                .animation(.easeOut(duration: 0.16)) // Add animation for smooth transition
             }
         }
         .onAppear {
@@ -97,13 +97,14 @@ struct CurrencyConvertView: View {
             fetchExchangeRates()
         }
     }
-    
-        private func fetchExchangeRates() {
-                ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedRateCurrencyIndex, currencies: currencies) { rates in
-                    self.exchangeRates = rates
-                }
-            }
+
+    private func fetchExchangeRates() {
+        ExchangeRateFetcher.fetchRates(apiKey: "bdb3c5b7f1a64792427d2f13", selectedCurrencyIndex: selectedRateCurrencyIndex, currencies: currencies) { rates in
+            self.exchangeRates = rates
         }
+    }
+}
+
 
 
 
