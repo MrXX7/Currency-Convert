@@ -35,11 +35,12 @@ struct CurrencyConvertView: View {
     @State private var exchangeRates: [String: Double] = [:]
     @State private var selectedRateCurrencyIndex = 0
     @StateObject private var keyboard = KeyboardResponder()
+    
 
     let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD", "CNY"]
     let flags: [String: String] = ["EUR": "🇪🇺", "USD": "🇺🇸", "GBP": "🇬🇧", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"]
     
-    let quickAmounts: [String] = ["1", "5", "10", "25", "50", "100", "200", "500"]
+    let quickAmounts: [String] = ["1", "5", "10", "25", "50", "100", "200", "500", "1000"]
     
     private func formatAmount(_ amount: String) -> String {
         if let doubleValue = Double(amount), doubleValue.truncatingRemainder(dividingBy: 1) == 0 {
@@ -64,7 +65,7 @@ struct CurrencyConvertView: View {
                     }
                     .preferredColorScheme(isDarkMode ? .dark : .light)
                     
-                    QuickAmountButtonsView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
+                    QuickAmountPickerView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
                     AmountInputView(euroAmount: $euroAmount)
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)

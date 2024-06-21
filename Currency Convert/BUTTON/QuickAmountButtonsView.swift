@@ -8,26 +8,24 @@
 import SwiftUI
 import Foundation
 
-struct QuickAmountButtonsView: View {
+struct QuickAmountPickerView: View {
     @Environment(\.colorScheme) var colorScheme
     var quickAmounts: [String]
     @Binding var euroAmount: String
 
     var body: some View {
-        HStack {
-            ForEach(quickAmounts, id: \.self) { amount in
-                Button(action: {
-                    euroAmount = amount
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                }) {
-                    Text("\(amount)")
-                        .frame(width: UIScreen.main.bounds.width / 10, height: UIScreen.main.bounds.height / 32)
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                        .background(Color(.gray).opacity(0.1))
-                        .cornerRadius(10)
+        VStack {
+            Picker("Select Amount", selection: $euroAmount) {
+                ForEach(quickAmounts, id: \.self) { amount in
+                    Text(amount).tag(amount)
                 }
             }
+            .pickerStyle(SegmentedPickerStyle())
+            //            .padding()
+            ////            .background(colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray4))
+            //            .cornerRadius(10)
+            //            .shadow(color: colorScheme == .dark ? Color.black.opacity(0.2) : Color.gray.opacity(0.2), radius: 5, x: 0, y: 2)
+            //        }
         }
         .padding(.vertical, 8)
     }
