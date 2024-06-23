@@ -22,9 +22,12 @@ struct ResetButton: View {
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
         }) {
-            Image(systemName: "arrow.counterclockwise.circle.fill")
-                .foregroundColor(Color(.systemOrange))
-                .padding()
+            HStack {
+                Text("Reset")
+                Image(systemName: "arrow.counterclockwise.circle.fill")
+                    .foregroundColor(Color(.systemOrange))
+//                    .padding()
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ struct CurrencyConvertView: View {
     let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD", "CNY"]
     let flags: [String: String] = ["EUR": "🇪🇺", "USD": "🇺🇸", "GBP": "🇬🇧", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"]
     
-    let quickAmounts: [String] = ["1", "5", "10", "25", "50", "100", "200", "500", "1000"]
+    let quickAmounts: [String] = ["5", "10", "25", "50", "100", "200", "500", "1000"]
     
     private func formatAmount(_ amount: String) -> String {
         if let doubleValue = Double(amount), doubleValue.truncatingRemainder(dividingBy: 1) == 0 {

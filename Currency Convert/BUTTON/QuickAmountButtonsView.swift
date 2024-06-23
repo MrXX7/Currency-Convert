@@ -21,11 +21,6 @@ struct QuickAmountPickerView: View {
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
-            //            .padding()
-            ////            .background(colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray4))
-            //            .cornerRadius(10)
-            //            .shadow(color: colorScheme == .dark ? Color.black.opacity(0.2) : Color.gray.opacity(0.2), radius: 5, x: 0, y: 2)
-            //        }
         }
         .padding(.vertical, 8)
     }
