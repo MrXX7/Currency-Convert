@@ -35,13 +35,11 @@ struct CurrencyConvertView: View {
     @State private var exchangeRates: [String: Double] = [:]
     @State private var selectedRateCurrencyIndex = 0
     @StateObject private var keyboard = KeyboardResponder()
-    
 
     let currencies = ["EUR", "USD", "GBP", "TRY", "CAD", "CHF", "SAR", "AUD", "CNY"]
     let flags: [String: String] = ["EUR": "🇪🇺", "USD": "🇺🇸", "GBP": "🇬🇧", "TRY": "🇹🇷", "CAD": "🇨🇦", "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"]
-    
     let quickAmounts: [String] = ["5", "10", "25", "50", "100", "200", "500", "1000"]
-    
+
     private func formatAmount(_ amount: String) -> String {
         if let doubleValue = Double(amount), doubleValue.truncatingRemainder(dividingBy: 1) == 0 {
             return String(format: "%.0f EUR", doubleValue)
@@ -55,10 +53,10 @@ struct CurrencyConvertView: View {
         let convertedAmount = AmountConverter.convertAmount(euroAmount: euroAmount, customExchangeRate: customExchangeRate, selectedCurrencyIndex: selectedCurrencyIndex, exchangeRates: exchangeRates, currencies: currencies)
         
         let automaticExchangeRates = AutomaticExchangeRatesGenerator.generateRates(currencies: currencies, exchangeRates: exchangeRates, flags: flags, baseCurrency: currencies[selectedRateCurrencyIndex])
-        
+
         return GeometryReader { geometry in
             ScrollView {
-                VStack {
+                VStack(spacing: 15) { // Boşluğu azaltmak için buradaki değeri düşürdüm
                     HStack {
                         Spacer()
                         DarkModeToggleButton(isDarkMode: $isDarkMode)
@@ -69,12 +67,13 @@ struct CurrencyConvertView: View {
                     AmountInputView(euroAmount: $euroAmount)
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
+                    
                     HStack {
                         TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
                         ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate, selectedCurrencyIndex: $selectedCurrencyIndex, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     }
                     Divider()
-                        .padding()
+                        .padding(.vertical, 10) // Divider öncesi ve sonrası boşlukları düşürdüm
                     
                     ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     
@@ -85,10 +84,10 @@ struct CurrencyConvertView: View {
                         .foregroundColor(.gray)
                 }
                 .padding()
-                .frame(minWidth: geometry.size.width * 0.9) // Adjust this value to balance left and right padding
+                .frame(minWidth: geometry.size.width * 0.9) // Ekran genişliğinin %90'ını kullanarak sol ve sağ boşlukları dengeledim
                 .frame(minHeight: geometry.size.height)
-                .padding(.bottom, keyboard.currentHeight) // Add bottom padding based on keyboard height
-                .animation(.easeOut(duration: 0.16)) // Add animation for smooth transition
+                .padding(.bottom, keyboard.currentHeight) // Klavye yüksekliğine göre alt boşluk ekledim
+                .animation(.easeOut(duration: 0.16)) // Geçiş için animasyon ekledim
             }
         }
         .onAppear {
