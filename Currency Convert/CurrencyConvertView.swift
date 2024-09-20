@@ -75,21 +75,19 @@ struct CurrencyConvertView: View {
                     QuickAmountPickerView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
                     AmountInputView(euroAmount: $euroAmount)
                     
-                    HStack {
-                        Text("Choose Currency to Convert To") // İkinci picker için açıklama
+                        Text("Choose Currency to Convert To")
                             .font(.headline)
                             .foregroundColor(.gray)
-                        Button(action: {
-                            showAllConversions.toggle()
-                        }) {
-                            HStack {
-                                    Image(systemName: "arrow.2.circlepath") // Ya da seçtiğin başka bir ikon
-                                    Text("Convert All")
-//                                        .font(.headline)
-                                }
-                        }
-                    }
+                        
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
+                    Button(action: {
+                        showAllConversions.toggle()
+                    }) {
+                        HStack {
+                                Image(systemName: "arrow.2.circlepath")
+                                Text("Convert All")
+                            }
+                    }
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
                     
                     Divider() // Add divider here
@@ -98,29 +96,25 @@ struct CurrencyConvertView: View {
                         TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
                         ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate, selectedCurrencyIndex: $selectedCurrencyIndex, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     }
-
-//                    if showAllConversions {
-//                        VStack(alignment: .leading, spacing: 1) {
-//                            ForEach(allCurrencyConversions, id: \.self) { result in
-//                                Text(result)
-////                                    .padding(.vertical, 5)
-//                            }
-//                        }
-//                        .padding(.leading)
-//                    }
-//                    
-//                    
-//                    AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
                     if showAllConversions {
-                        VStack(alignment: .leading, spacing: 1) {
+                        VStack(alignment: .leading, spacing: 2) {
                             ForEach(allCurrencyConversions, id: \.self) { result in
                                 Text(result)
+                                    .font(.body)
+                                    .padding(.bottom, 2)
                             }
+                            
+                            Spacer()
                         }
-                        .padding(.leading)
+                        .padding(.leading, 10)
+                        .transition(.slide) // Slayt animasyonu ekliyoruz
+                        .animation(.easeInOut) // Yumuşak bir geçiş için animasyon
                     } else {
                         AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
+                            .transition(.slide) // Aynı slayt geçişini burada da ekliyoruz
+                            .animation(.easeInOut) // Yumuşak geçiş
                     }
+
 
                     
                     Text("© 2023 Öncü Can. All rights reserved.")
