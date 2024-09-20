@@ -16,13 +16,13 @@ struct AutomaticExchangeRatesView: View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("\(selectedCurrency) Exchange Rates")
-                    .font(.title3)
+                    .font(.headline)
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                     .padding(.bottom, 10)
                 
                 ForEach(automaticExchangeRates, id: \.self) { rate in
                     Text(rate)
-                        .font(.body)
+                        .font(.subheadline)
                         .foregroundColor(colorScheme == .dark ? .gray : .black)
                         .padding(.bottom, 2)
                 }

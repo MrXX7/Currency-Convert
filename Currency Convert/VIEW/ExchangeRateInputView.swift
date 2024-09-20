@@ -13,9 +13,9 @@ struct ExchangeRateInputView: View {
     var body: some View {
         HStack {
             Text("Exchange Rate:")
-                .font(.title2)
+                .font(.footnote)
             TextField("Enter Rate", text: $customExchangeRate)
-                .font(.title2)
+                .font(.footnote)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.decimalPad)
         }

@@ -61,41 +61,53 @@ struct CurrencyConvertView: View {
 
         return GeometryReader { geometry in
             ScrollView {
-                VStack(spacing: 10) { // Adjusted spacing to 10
+                VStack(spacing: 5) { // Adjusted spacing to 10
                     HStack {
                         Spacer()
                         DarkModeToggleButton(isDarkMode: $isDarkMode)
                     }
+                    .padding(.horizontal, 10)
                     .preferredColorScheme(isDarkMode ? .dark : .light)
                     
-                    Text("Choose Your Currency") // Kullanıcıya açıklama ekliyoruz
-                                .font(.headline)
+                    Text("Choose Your Currency")
+                        .font(.system(size: geometry.size.width > 320 ? 16 : 14)) // iPhone SE için daha küçük font
+
                                 .foregroundColor(.gray)
                     ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
+                        .frame(maxWidth: .infinity)
                     QuickAmountPickerView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
+                        .frame(maxWidth: .infinity)
                     AmountInputView(euroAmount: $euroAmount)
+                        .frame(maxWidth: .infinity)
                     
-                        Text("Choose Currency to Convert To")
-                            .font(.headline)
-                            .foregroundColor(.gray)
+                    Text("Choose Currency to Convert To")
+                        .font(.system(size: geometry.size.width > 320 ? 16 : 14))
+                        .foregroundColor(.gray)
+                        .font(.system(size: 14, weight: .medium, design: .default))
                         
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
+                        .frame(maxWidth: .infinity)
                     Button(action: {
                         showAllConversions.toggle()
                     }) {
                         HStack {
                                 Image(systemName: "arrow.2.circlepath")
                                 Text("Convert All")
+                                .font(.footnote)
                             }
-                    }
+                        
+                    }.frame(maxWidth: .infinity)
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
                     
                     Divider() // Add divider here
                     
                     HStack {
                         TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
+                        Spacer() // Çok büyük boşluk bırakmaması için ekran boyutuna göre ayarlanabilir
                         ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate, selectedCurrencyIndex: $selectedCurrencyIndex, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     }
+                    .frame(maxWidth: .infinity) // Ekrana göre genişliği ayarla
+
                     if showAllConversions {
                         VStack(alignment: .leading, spacing: 2) {
                             ForEach(allCurrencyConversions, id: \.self) { result in
@@ -122,10 +134,10 @@ struct CurrencyConvertView: View {
                         .foregroundColor(.gray)
                 }
                 .padding()
-                .frame(minWidth: geometry.size.width * 0.9) // Adjust this value to balance left and right padding
-                .frame(minHeight: geometry.size.height)
-                .padding(.bottom, keyboard.currentHeight) // Add bottom padding based on keyboard height
-                .animation(.easeOut(duration: 0.16)) // Add animation for smooth transition
+                .frame(maxWidth: .infinity) // Ekran genişliğine göre genişlik veriyoruz
+                    .frame(minHeight: geometry.size.height) // İçeriğin minimum yüksekliği ekran boyutuna göre ayarlanır
+                    .padding(.bottom, keyboard.currentHeight) // Klavye çıktığında otomatik olarak padding eklenir
+                    .animation(.easeOut(duration: 0.16))  // Add animation for smooth transition
             }
         }
         .onAppear {

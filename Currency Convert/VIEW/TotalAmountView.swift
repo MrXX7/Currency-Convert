@@ -17,7 +17,7 @@ struct TotalAmountView: View {
         HStack {
             Text("Total Amount: \(animatedConvertedAmount, specifier: "%.2f") \(selectedCurrency)")
                 .padding(.vertical)
-                .font(.title2)
+                .font(.title3)
                 .onAppear {
                     withAnimation(.spring()) {
                         animatedConvertedAmount = convertedAmount
