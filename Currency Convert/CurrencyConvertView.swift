@@ -63,8 +63,16 @@ struct CurrencyConvertView: View {
                     }
                     .preferredColorScheme(isDarkMode ? .dark : .light)
                     
+                    Text("Choose Your Currency") // Kullanıcıya açıklama ekliyoruz
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                    ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     QuickAmountPickerView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
                     AmountInputView(euroAmount: $euroAmount)
+                    
+                    Text("Choose Currency to Convert To") // İkinci picker için açıklama
+                                .font(.headline)
+                                .foregroundColor(.gray)
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
                     
@@ -74,8 +82,7 @@ struct CurrencyConvertView: View {
                         TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
                         ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate, selectedCurrencyIndex: $selectedCurrencyIndex, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
                     }
-//                    Divider() // Reduced padding around the Divider
-                    ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
+                    
                     
                     AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
                     
