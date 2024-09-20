@@ -103,6 +103,21 @@ struct CurrencyConvertView: View {
             self.exchangeRates = rates
         }
     }
+    
+    private func convertAmountForAllCurrencies(baseAmount: String, baseCurrency: String) -> [String] {
+        guard let amount = Double(baseAmount) else { return [] }
+        
+        var results: [String] = []
+        for currency in currencies {
+            if currency != baseCurrency, let rate = exchangeRates[currency] {
+                let convertedValue = amount * rate
+                let formattedResult = String(format: "%.2f \(currency)", convertedValue)
+                results.append("\(flags[currency] ?? "") \(formattedResult)")
+            }
+        }
+        return results
+    }
+
 }
 
 
