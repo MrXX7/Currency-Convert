@@ -61,13 +61,14 @@ struct CurrencyConvertView: View {
 
         return GeometryReader { geometry in
             ScrollView {
-                VStack(spacing: 5) { // Adjusted spacing to 10
+                VStack(spacing: 5) {
                     HStack {
                         Spacer()
                         DarkModeToggleButton(isDarkMode: $isDarkMode)
                     }
-                    .padding(.horizontal, 10)
+                    
                     .preferredColorScheme(isDarkMode ? .dark : .light)
+                    .padding(.horizontal, 10)
                     
                     Text("Choose Your Currency")
                         .font(.system(size: geometry.size.width > 320 ? 16 : 14)) // iPhone SE için daha küçük font
@@ -112,32 +113,28 @@ struct CurrencyConvertView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             ForEach(allCurrencyConversions, id: \.self) { result in
                                 Text(result)
-                                    .font(.body)
-                                    .padding(.bottom, 2)
+                                    .font(.subheadline)
+                                    .padding(.leading, -70)
                             }
-                            
-                            Spacer()
                         }
-                        .padding(.leading, 10)
-                        .transition(.slide) // Slayt animasyonu ekliyoruz
-                        .animation(.easeInOut) // Yumuşak bir geçiş için animasyon
+                        .padding(.leading, -90)
+                        .transition(.slide)
+                        .animation(.easeInOut(duration: 0.8))
                     } else {
                         AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
-                            .transition(.slide) // Aynı slayt geçişini burada da ekliyoruz
-                            .animation(.easeInOut) // Yumuşak geçiş
+                            .transition(.slide)
+                            .animation(.easeInOut)
                     }
 
-
-                    
                     Text("© 2023 Öncü Can. All rights reserved.")
                         .font(.footnote)
                         .foregroundColor(.gray)
                 }
                 .padding()
-                .frame(maxWidth: .infinity) // Ekran genişliğine göre genişlik veriyoruz
-                    .frame(minHeight: geometry.size.height) // İçeriğin minimum yüksekliği ekran boyutuna göre ayarlanır
-                    .padding(.bottom, keyboard.currentHeight) // Klavye çıktığında otomatik olarak padding eklenir
-                    .animation(.easeOut(duration: 0.16))  // Add animation for smooth transition
+                .frame(maxWidth: .infinity)
+                    .frame(minHeight: geometry.size.height)
+                    .padding(.bottom, keyboard.currentHeight)
+                    .animation(.easeOut(duration: 0.6))
             }
         }
         .onAppear {
