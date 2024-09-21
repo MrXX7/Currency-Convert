@@ -105,8 +105,12 @@ struct CurrencyConvertView: View {
                     HStack {
                         TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
                         Spacer() // Çok büyük boşluk bırakmaması için ekran boyutuna göre ayarlanabilir
-                        ResetButton(euroAmount: $euroAmount, customExchangeRate: $customExchangeRate, selectedCurrencyIndex: $selectedCurrencyIndex, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
-                    }
+                        ResetButton(euroAmount: $euroAmount,
+                                        customExchangeRate: $customExchangeRate,
+                                        selectedCurrencyIndex: $selectedCurrencyIndex,
+                                        selectedRateCurrencyIndex: $selectedRateCurrencyIndex,
+                                        showAllConversions: $showAllConversions) // showAllConversions'ı da binding olarak veriyoruz.
+                        }
                     .frame(maxWidth: .infinity) // Ekrana göre genişliği ayarla
 
                     if showAllConversions {

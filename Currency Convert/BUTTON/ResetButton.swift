@@ -12,21 +12,21 @@ struct ResetButton: View {
     @Binding var customExchangeRate: String
     @Binding var selectedCurrencyIndex: Int
     @Binding var selectedRateCurrencyIndex: Int
+    @Binding var showAllConversions: Bool // showAllConversions'ı da ekliyoruz.
 
     var body: some View {
         Button(action: {
+            // Alanları sıfırlıyoruz
             euroAmount = ""
             customExchangeRate = ""
             selectedCurrencyIndex = 0
             selectedRateCurrencyIndex = 0
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
+            showAllConversions = false // Tüm conversion'ları kapat
         }) {
             HStack {
-                Text("Reset")
                 Image(systemName: "arrow.counterclockwise.circle.fill")
-                    .foregroundColor(Color(.systemOrange))
-//                    .padding()
+                Text("Reset")
+                    .foregroundColor(.blue)
             }
         }
     }
