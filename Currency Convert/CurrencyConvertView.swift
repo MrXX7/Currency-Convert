@@ -122,14 +122,18 @@ struct CurrencyConvertView: View {
                 
                 // Alt kısımda sadece sonuçlar değişsin
                 VStack {
+                    // Show All Conversions
+                    // Show All Conversions
                     if showAllConversions {
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: 8) { // Increase the vertical spacing a bit for readability
                             ForEach(allCurrencyConversions, id: \.self) { result in
                                 Text(result)
-                                    .font(.subheadline)
-                                    .padding(.leading, 10)
+                                    .font(.footnote)
+                                    .frame(maxWidth: .infinity, alignment: .leading) // Align to the left
+                                    .padding(.leading, 20) // Add left padding to move away from the edge
                             }
                         }
+                        .padding(.bottom, 30) // Add bottom padding to ensure it's not touching the screen edge
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.8))
                     } else {
@@ -146,7 +150,7 @@ struct CurrencyConvertView: View {
                 Text("© 2023 Öncü Can. All rights reserved.")
                     .font(.footnote)
                     .foregroundColor(.gray)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 20)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(minHeight: geometry.size.height) // Ensures full height of the screen
