@@ -156,6 +156,7 @@ struct CurrencyConvertView: View {
             .frame(minHeight: geometry.size.height) // Ensures full height of the screen
             .padding(.bottom, keyboard.currentHeight) // Adjust for keyboard height
             .animation(.easeOut(duration: 0.6))
+            .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
             fetchExchangeRates()
