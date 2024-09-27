@@ -120,19 +120,13 @@ struct CurrencyConvertView: View {
                 .padding()
                 .frame(maxWidth: .infinity)
                 
-                // Alt kısımda sadece sonuçlar değişsin
                 VStack {
-                    // Show All Conversions
-                    // Show All Conversions
+                    
                     if showAllConversions {
-                        VStack(alignment: .leading, spacing: 8) { // Increase the vertical spacing a bit for readability
-                            ForEach(allCurrencyConversions, id: \.self) { result in
-                                Text(result)
-                                    .font(.footnote)
-                                    .frame(maxWidth: .infinity, alignment: .leading) // Align to the left
-                                    .padding(.leading, 20) // Add left padding to move away from the edge
+                        VStack(alignment: .leading, spacing: 8) {
+                            CurrencyConversionListView(conversions: allCurrencyConversions)
                             }
-                        }
+                        
                         .padding(.bottom, 30) // Add bottom padding to ensure it's not touching the screen edge
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.8))

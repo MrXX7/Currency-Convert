@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD01A2672BFFE03D00720E44 /* ExchangeRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */; };
+		AD2D5EE22CA7465D00E5BE17 /* CurrencyConversionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2D5EE12CA7465D00E5BE17 /* CurrencyConversionListView.swift */; };
 		AD3250642B20E1E30024E2DF /* ExchangeRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3250632B20E1E30024E2DF /* ExchangeRates.swift */; };
 		AD3250662B20E2590024E2DF /* DarkModeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3250652B20E2590024E2DF /* DarkModeToggleButton.swift */; };
 		AD3250682B20E4A60024E2DF /* AmountInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3250672B20E4A60024E2DF /* AmountInputView.swift */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRatePickerView.swift; sourceTree = "<group>"; };
+		AD2D5EE12CA7465D00E5BE17 /* CurrencyConversionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConversionListView.swift; sourceTree = "<group>"; };
 		AD3250632B20E1E30024E2DF /* ExchangeRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRates.swift; sourceTree = "<group>"; };
 		AD3250652B20E2590024E2DF /* DarkModeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeToggleButton.swift; sourceTree = "<group>"; };
 		AD3250672B20E4A60024E2DF /* AmountInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountInputView.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				AD32506E2B20E7170024E2DF /* TotalAmountView.swift */,
 				AD3250702B20E82D0024E2DF /* AutomaticExchangeRatesView.swift */,
 				AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */,
+				AD2D5EE12CA7465D00E5BE17 /* CurrencyConversionListView.swift */,
 			);
 			path = VIEW;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				AD641B5B2C19260B006812F6 /* QuickAmountButtonsView.swift in Sources */,
 				AD3250712B20E82D0024E2DF /* AutomaticExchangeRatesView.swift in Sources */,
 				AD32506A2B20E56A0024E2DF /* CurrencyPickerView.swift in Sources */,
+				AD2D5EE22CA7465D00E5BE17 /* CurrencyConversionListView.swift in Sources */,
 				AD3250732B20E9230024E2DF /* AutomaticExchangeRatesGenerator.swift in Sources */,
 				AD32506F2B20E7170024E2DF /* TotalAmountView.swift in Sources */,
 				AD3250642B20E1E30024E2DF /* ExchangeRates.swift in Sources */,
