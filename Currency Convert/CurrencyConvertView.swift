@@ -87,15 +87,25 @@ struct CurrencyConvertView: View {
                         .frame(maxWidth: .infinity)
                     
                     // "Convert All" Button
+//                    Button(action: {
+//                        showAllConversions.toggle()
+//                    }) {
+//                        HStack {
+//                            Image(systemName: "arrow.2.circlepath")
+//                            Text("Convert All")
+//                                .font(.footnote)
+//                        }
+//                    }
                     Button(action: {
                         showAllConversions.toggle()
                     }) {
                         HStack {
-                            Image(systemName: "arrow.2.circlepath")
-                            Text("Convert All")
+                            Image(systemName: "globe") // or another icon
+                            Text("All Conversions")
                                 .font(.footnote)
                         }
                     }
+
                     .frame(maxWidth: .infinity)
                     .disabled(euroAmount.isEmpty || euroAmount == "0") // Disable button when input is empty
                     
