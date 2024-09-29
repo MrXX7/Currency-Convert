@@ -125,10 +125,9 @@ struct CurrencyConvertView: View {
                                     selectedRateCurrencyIndex: $selectedRateCurrencyIndex,
                                     showAllConversions: $showAllConversions)
                     }
-                    .frame(maxWidth: .infinity)
+//                    .frame(maxWidth: .infinity)
                 }
                 .padding()
-                .frame(maxWidth: .infinity)
                 
                 VStack {
                     
