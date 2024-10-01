@@ -50,7 +50,6 @@ struct CurrencyConvertView: View {
 
         return GeometryReader { geometry in
             VStack {
-                // Üst kısımdaki kontroller sabit kalsın, sadece alt kısım değişsin
                 VStack(spacing: 5) {
                     // Dark Mode Toggle
                     HStack {
@@ -102,18 +101,15 @@ struct CurrencyConvertView: View {
                                     selectedRateCurrencyIndex: $selectedRateCurrencyIndex,
                                     showAllConversions: $showAllConversions)
                     }
-//                    .frame(maxWidth: .infinity)
                 }
                 .padding()
                 
                 VStack {
-                    
                     if showAllConversions {
                         VStack(alignment: .leading, spacing: 8) {
                             CurrencyConversionListView(conversions: allCurrencyConversions)
-                            }
-                        
-                        .padding(.bottom, 30) // Add bottom padding to ensure it's not touching the screen edge
+                        }
+                        .padding(.bottom, 30)
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.8))
                     } else {
@@ -121,7 +117,6 @@ struct CurrencyConvertView: View {
                             .transition(.slide)
                             .animation(.easeInOut)
                     }
-                    
                 }
                 .frame(maxWidth: .infinity)
                 
@@ -134,8 +129,8 @@ struct CurrencyConvertView: View {
                     .padding(.bottom, 20)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
-            .frame(minHeight: geometry.size.height) // Ensures full height of the screen
-            .padding(.bottom, keyboard.currentHeight) // Adjust for keyboard height
+            .frame(minHeight: geometry.size.height)
+            .padding(.bottom, keyboard.currentHeight)
             .animation(.easeOut(duration: 0.6))
             .edgesIgnoringSafeArea(.bottom)
         }
@@ -167,6 +162,7 @@ struct CurrencyConvertView: View {
         return results
     }
 }
+
 
 
 
