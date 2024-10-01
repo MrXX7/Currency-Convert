@@ -84,32 +84,9 @@ struct CurrencyConvertView: View {
                     
                     // Currency Picker for Conversion
                     CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
-                        .frame(maxWidth: .infinity)
-                    
-                    // "Convert All" Button
-//                    Button(action: {
-//                        showAllConversions.toggle()
-//                    }) {
-//                        HStack {
-//                            Image(systemName: "arrow.2.circlepath")
-//                            Text("Convert All")
-//                                .font(.footnote)
-//                        }
-//                    }
-                    Button(action: {
-                        showAllConversions.toggle()
-                    }) {
-                        HStack {
-                            Image(systemName: "globe") // or another icon
-                            Text("All Conversions")
-                                .font(.footnote)
-                        }
-                    }
 
-                    .frame(maxWidth: .infinity)
-                    .disabled(euroAmount.isEmpty || euroAmount == "0") // Disable button when input is empty
+                    AllConversionsButtonView(showAllConversions: $showAllConversions, euroAmount: $euroAmount)
                     
-                    // Custom Exchange Rate Input
                     ExchangeRateInputView(customExchangeRate: $customExchangeRate)
                     
                     // Divider
@@ -144,6 +121,7 @@ struct CurrencyConvertView: View {
                             .transition(.slide)
                             .animation(.easeInOut)
                     }
+                    
                 }
                 .frame(maxWidth: .infinity)
                 
