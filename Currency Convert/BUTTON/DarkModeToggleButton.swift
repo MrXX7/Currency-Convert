@@ -13,6 +13,8 @@ struct DarkModeToggleButton: View {
     var body: some View {
         Button(action: {
             isDarkMode.toggle()
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
         }) {
             Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
                 .font(.title2)

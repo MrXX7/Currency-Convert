@@ -22,6 +22,8 @@ struct ResetButton: View {
             selectedCurrencyIndex = 0
             selectedRateCurrencyIndex = 0
             showAllConversions = false // Tüm conversion'ları kapat
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
         }) {
             HStack {
                 Image(systemName: "arrow.counterclockwise.circle.fill")

@@ -14,6 +14,8 @@ struct AllConversionsButtonView: View {
     var body: some View {
         Button(action: {
             showAllConversions.toggle()
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
         }) {
             HStack {
                 Image(systemName: "globe")
