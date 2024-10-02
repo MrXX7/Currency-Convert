@@ -122,7 +122,6 @@ struct CurrencyConvertView: View {
                 
                 Spacer()
 
-                // Footer sabit kalsın
                 Text("© 2023 Öncü Can. All rights reserved.")
                     .font(.footnote)
                     .foregroundColor(.gray)

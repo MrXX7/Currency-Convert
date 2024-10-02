@@ -12,7 +12,7 @@ struct ExchangeRateInputView: View {
 
     var body: some View {
         HStack {
-            Text("Exchange Rate:")
+            Text("Custom Exchange Rate:")
                 .font(.footnote)
             TextField("Enter Rate", text: $customExchangeRate)
                 .font(.footnote)
