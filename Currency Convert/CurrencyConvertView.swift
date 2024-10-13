@@ -83,7 +83,7 @@ struct CurrencyConvertView: View {
                                     showAllConversions: $showAllConversions)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
                 
                 VStack {
                     if showAllConversions {
