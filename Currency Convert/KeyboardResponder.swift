@@ -13,17 +13,23 @@ final class KeyboardResponder: ObservableObject {
     private var cancellableSet: Set<AnyCancellable> = []
     
     init() {
-        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
-            .merge(with: NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification))
+        let keyboardWillShow = NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
             .compactMap { notification -> CGFloat? in
-                if notification.name == UIResponder.keyboardWillShowNotification {
-                    return (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height
-                } else {
-                    return 0
+                (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height
+            }
+
+        let keyboardWillHide = NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+            .map { _ -> CGFloat in 0 }
+
+        // Merge the two publishers to observe both keyboard show and hide events
+        keyboardWillShow.merge(with: keyboardWillHide)
+            .sink { [weak self] height in
+                withAnimation(.easeOut(duration: 0.3)) {
+                    self?.currentHeight = height
                 }
             }
-            .assign(to: \.currentHeight, on: self)
             .store(in: &cancellableSet)
     }
 }
+
 
