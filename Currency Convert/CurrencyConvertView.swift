@@ -30,89 +30,83 @@ struct CurrencyConvertView: View {
         let allCurrencyConversions = convertAmountForAllCurrencies(baseAmount: euroAmount, baseCurrency: currencies[selectedCurrencyIndex])
 
         return GeometryReader { geometry in
-            VStack {
-                VStack(spacing: 5) {
-                    // Dark Mode Toggle
-                    HStack {
-                        Spacer()
-                        DarkModeToggleButton(isDarkMode: $isDarkMode)
-                    }
-                    .padding(.horizontal, 10)
-                    .preferredColorScheme(isDarkMode ? .dark : .light)
-                    
-                    // Currency Selection Header
-                    Text("Choose Your Currency")
-                        .font(.system(size: geometry.size.width > 320 ? 16 : 14)) // Adjust font for small devices
-                        .foregroundColor(.gray)
-                    
-                    // Currency Picker
-                    ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
-                        .frame(maxWidth: .infinity)
-                    
-                    // Quick Amount Picker
-                    QuickAmountPickerView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
-                        .frame(maxWidth: .infinity)
-                    
-                    // Amount Input Field
-                    AmountInputView(euroAmount: $euroAmount)
-                        .frame(maxWidth: .infinity)
-                    
-                    // Conversion Header
-                    Text("Choose Currency to Convert To")
-                        .font(.system(size: geometry.size.width > 320 ? 16 : 14))
-                        .foregroundColor(.gray)
-                    
-                    // Currency Picker for Conversion
-                    CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
-
-                    AllConversionsButtonView(showAllConversions: $showAllConversions, euroAmount: $euroAmount)
-                    
-                    ExchangeRateInputView(customExchangeRate: $customExchangeRate)
-                    
-                    // Divider
-                    Divider()
-                    
-                    // Total Amount and Reset Button
-                    HStack {
-                        TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
-                        Spacer()
-                        ResetButton(euroAmount: $euroAmount,
-                                    customExchangeRate: $customExchangeRate,
-                                    selectedCurrencyIndex: $selectedCurrencyIndex,
-                                    selectedRateCurrencyIndex: $selectedRateCurrencyIndex,
-                                    showAllConversions: $showAllConversions)
-                    }
-                }
-                .padding(.horizontal)
-                
+            ScrollView {
                 VStack {
-                    if showAllConversions {
-                        VStack(alignment: .leading, spacing: 8) {
-                            CurrencyConversionListView(conversions: allCurrencyConversions)
+                    VStack(spacing: 5) {
+                        // Dark Mode Toggle
+                        HStack {
+                            Spacer()
+                            DarkModeToggleButton(isDarkMode: $isDarkMode)
                         }
-                        .padding(.bottom, 30)
-                        .transition(.opacity)
-                        .animation(.easeInOut(duration: 0.8))
-                    } else {
-                        AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
-                            .transition(.slide)
-                            .animation(.easeInOut)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                
-                Spacer()
+                        .padding(.horizontal, 10)
+                        .preferredColorScheme(isDarkMode ? .dark : .light)
+                        
+                        // Currency Selection Header
+                        Text("Choose Your Currency")
+                            .font(.system(size: geometry.size.width > 320 ? 16 : 14)) // Adjust font for small devices
+                            .foregroundColor(.gray)
+                        
+                        // Currency Picker
+                        ExchangeRatePickerView(currencies: currencies, selectedRateCurrencyIndex: $selectedRateCurrencyIndex)
+                            .frame(maxWidth: .infinity)
+                        
+                        // Quick Amount Picker
+                        QuickAmountPickerView(quickAmounts: quickAmounts, euroAmount: $euroAmount)
+                            .frame(maxWidth: .infinity)
+                        
+                        // Amount Input Field
+                        AmountInputView(euroAmount: $euroAmount)
+                            .frame(maxWidth: .infinity)
+                        
+                        // Conversion Header
+                        Text("Choose Currency to Convert To")
+                            .font(.system(size: geometry.size.width > 320 ? 16 : 14))
+                            .foregroundColor(.gray)
+                        
+                        // Currency Picker for Conversion
+                        CurrencyPickerView(currencies: currencies, selectedCurrencyIndex: $selectedCurrencyIndex)
 
-                Text("© 2023 Öncü Can. All rights reserved.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.bottom, 20)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                        AllConversionsButtonView(showAllConversions: $showAllConversions, euroAmount: $euroAmount)
+                        
+                        ExchangeRateInputView(customExchangeRate: $customExchangeRate)
+                        
+                        // Divider
+                        Divider()
+                        
+                        // Total Amount and Reset Button
+                        HStack {
+                            TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
+                            Spacer()
+                            ResetButton(euroAmount: $euroAmount,
+                                        customExchangeRate: $customExchangeRate,
+                                        selectedCurrencyIndex: $selectedCurrencyIndex,
+                                        selectedRateCurrencyIndex: $selectedRateCurrencyIndex,
+                                        showAllConversions: $showAllConversions)
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    VStack {
+                        if showAllConversions {
+                            VStack(alignment: .leading, spacing: 8) {
+                                CurrencyConversionListView(conversions: allCurrencyConversions)
+                            }
+                            .padding(.bottom, 30)
+                            .transition(.opacity)
+                            .animation(.easeInOut(duration: 0.8))
+                        } else {
+                            AutomaticExchangeRatesView(automaticExchangeRates: automaticExchangeRates, selectedCurrency: currencies[selectedRateCurrencyIndex])
+                                .transition(.slide)
+                                .animation(.easeInOut)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(minHeight: geometry.size.height)
+                .padding(.bottom, keyboard.currentHeight)
+                .animation(.easeOut(duration: 0.6))
+                .edgesIgnoringSafeArea(.bottom)
             }
-            .frame(minHeight: geometry.size.height)
-            .padding(.bottom, keyboard.currentHeight)
-            .animation(.easeOut(duration: 0.6))
-            .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
             fetchExchangeRates()
@@ -142,6 +136,7 @@ struct CurrencyConvertView: View {
         return results
     }
 }
+
 
 
 
