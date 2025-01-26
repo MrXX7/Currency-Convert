@@ -9,25 +9,39 @@ import SwiftUI
 
 struct CurrencyFlagDetailView: View {
     var currency: String
-    var flagImageName: String
+    var flagImageNames: [String]
 
     var body: some View {
         VStack {
+            // Title for the currency
             Text(currency)
                 .font(.title)
-                .padding(.top)
-
-            // Display the flag image based on the image name
-            Image(flagImageName)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 250)
                 .padding()
+
+            // Horizontal ScrollView for images
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    ForEach(flagImageNames, id: \.self) { imageName in
+                        Image(imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 250, height: 250)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                    }
+                }
+                .padding()
+            }
 
             Spacer()
         }
         .navigationBarTitle(Text(currency), displayMode: .inline)
     }
 }
+
+#Preview {
+    CurrencyFlagDetailView(currency: "CAD", flagImageNames: ["CADFlag", "cad1", "cad2", "cad3"])
+}
+
 
 

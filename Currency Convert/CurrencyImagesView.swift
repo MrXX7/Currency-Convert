@@ -13,9 +13,9 @@ struct CurrencyImagesView: View {
         "EUR": "🇪🇺", "USD": "🇺🇸", "GBP": "🇬🇧", "TRY": "🇹🇷", "CAD": "🇨🇦",
         "CHF": "🇨🇭", "SAR": "🇸🇦", "AUD": "🇦🇺", "CNY": "🇨🇳"
     ]
-
+    
     var body: some View {
-        NavigationView {
+        NavigationView {  // Wrap your view inside a NavigationView
             VStack {
                 Text("Currency Flags")
                     .font(.title)
@@ -24,31 +24,32 @@ struct CurrencyImagesView: View {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                         ForEach(currencies, id: \.self) { currency in
-                            NavigationLink(
-                                destination: CurrencyFlagDetailView(currency: currency, flagImageName: currency),
-                                label: {
-                                    VStack {
-                                        Text(flags[currency] ?? "")
-                                            .font(.system(size: 50))
-                                        Text(currency)
-                                            .font(.subheadline)
-                                            .padding(.top, 5)
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .center)
+                            VStack {
+                                Text(flags[currency] ?? "")
+                                    .font(.system(size: 50))
+                                Text(currency)
+                                    .font(.subheadline)
+                                    .padding(.top, 5)
+                                
+                                // NavigationLink for Currency Details
+                                NavigationLink(destination: CurrencyFlagDetailView(currency: currency, flagImageNames: [currency + "Flag", currency.lowercased() + "1", currency.lowercased() + "2", currency.lowercased() + "3"])) {
+                                    Text("View \(currency) Details")  // Make it clickable
+                                        .font(.subheadline)
+                                        .foregroundColor(.blue)   // Make it look like a clickable link
+                                        .padding(.top, 5)
                                 }
-                            )
+                            }
+                            .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
                     .padding()
                 }
             }
-            .navigationBarTitle("Currency Flags", displayMode: .inline)
         }
     }
 }
 
-
-
 #Preview {
     CurrencyImagesView()
 }
+
