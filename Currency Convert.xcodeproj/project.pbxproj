@@ -29,6 +29,7 @@
 		ADBFB7AF2B174903003B6A23 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ADBFB7AE2B174903003B6A23 /* Alamofire */; };
 		ADE254E12D463CBB00D4E4EA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE254E02D463CBB00D4E4EA /* ContentView.swift */; };
 		ADE254E32D463CF200D4E4EA /* CurrencyImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE254E22D463CF200D4E4EA /* CurrencyImagesView.swift */; };
+		ADE254E52D4640AF00D4E4EA /* CurrencyFlagDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE254E42D4640AF00D4E4EA /* CurrencyFlagDetailView.swift */; };
 		ADF609F32CB6834E001C217A /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF609F22CB6834E001C217A /* KeyboardResponder.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		AD8A662C2B16BB5300073D0E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ADE254E02D463CBB00D4E4EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ADE254E22D463CF200D4E4EA /* CurrencyImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyImagesView.swift; sourceTree = "<group>"; };
+		ADE254E42D4640AF00D4E4EA /* CurrencyFlagDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFlagDetailView.swift; sourceTree = "<group>"; };
 		ADF609F22CB6834E001C217A /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +82,7 @@
 				AD3250702B20E82D0024E2DF /* AutomaticExchangeRatesView.swift */,
 				AD01A2662BFFE03D00720E44 /* ExchangeRatePickerView.swift */,
 				AD2D5EE12CA7465D00E5BE17 /* CurrencyConversionListView.swift */,
+				ADE254E42D4640AF00D4E4EA /* CurrencyFlagDetailView.swift */,
 			);
 			path = VIEW;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADE254E52D4640AF00D4E4EA /* CurrencyFlagDetailView.swift in Sources */,
 				AD8A66282B16BB5000073D0E /* CurrencyConvertView.swift in Sources */,
 				AD32507A2B20EB2D0024E2DF /* ExchangeRateFetcher.swift in Sources */,
 				AD32506C2B20E6560024E2DF /* ExchangeRateInputView.swift in Sources */,

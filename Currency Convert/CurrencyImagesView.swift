@@ -15,29 +15,38 @@ struct CurrencyImagesView: View {
     ]
 
     var body: some View {
-        VStack {
-            Text("Currency Flags")
-                .font(.title)
-                .padding()
+        NavigationView {
+            VStack {
+                Text("Currency Flags")
+                    .font(.title)
+                    .padding()
 
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
-                    ForEach(currencies, id: \.self) { currency in
-                        VStack {
-                            Text(flags[currency] ?? "")
-                                .font(.system(size: 50))
-                            Text(currency)
-                                .font(.subheadline)
-                                .padding(.top, 5)
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
+                        ForEach(currencies, id: \.self) { currency in
+                            NavigationLink(
+                                destination: CurrencyFlagDetailView(currency: currency, flag: flags[currency] ?? ""),
+                                label: {
+                                    VStack {
+                                        Text(flags[currency] ?? "")
+                                            .font(.system(size: 50))
+                                        Text(currency)
+                                            .font(.subheadline)
+                                            .padding(.top, 5)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                }
+                            )
                         }
-                        .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .padding()
                 }
-                .padding()
             }
+            .navigationBarTitle("Currency Flags", displayMode: .inline)
         }
     }
 }
+
 
 #Preview {
     CurrencyImagesView()
