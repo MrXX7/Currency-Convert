@@ -35,25 +35,29 @@ struct CurrencyImagesView: View {
                                         currency.lowercased() + "8"
                                     ].filter { UIImage(named: $0) != nil } // Filter out invalid image names
                                 )) {
-                                    Text(flags[currency] ?? "") // Display the country flag as a clickable link
-                                        .font(.system(size: 50))  // Set font size for the flag emoji
+                                    // Center the flag and increase the size
+                                    Text(flags[currency] ?? "")
+                                        .font(.system(size: 70))  // Increased size for flags
                                         .frame(maxWidth: .infinity, alignment: .center)
                                         .padding()
+                                        .background(Color.gray.opacity(0.2), in: RoundedRectangle(cornerRadius: 10)) // Optional background
                                 }
 
-
                                 // Display the country name below the flag
+                                Text(currency)
+                                    .font(.subheadline)
+                                    .padding(.top, 5)
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
                     .padding()
                 }
-
             }
         }
     }
 }
+
 
 #Preview {
     CurrencyImagesView()
