@@ -17,33 +17,26 @@ struct CurrencyImagesView: View {
     var body: some View {
         NavigationView {  // Wrap your view inside a NavigationView
             VStack {
-                Text("Currency Flags")
-                    .font(.title)
-                    .padding()
-
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                         ForEach(currencies, id: \.self) { currency in
                             VStack {
-                                Text(flags[currency] ?? "")
-                                    .font(.system(size: 50))
-                                Text(currency)
-                                    .font(.subheadline)
-                                    .padding(.top, 5)
-                                
-                                // NavigationLink for Currency Details
-                                NavigationLink(destination: CurrencyFlagDetailView(currency: currency, flagImageNames: [currency + "Flag", currency.lowercased() + "1", currency.lowercased() + "2", currency.lowercased() + "3"])) {
-                                    Text("View \(currency) Details")  // Make it clickable
-                                        .font(.subheadline)
-                                        .foregroundColor(.blue)   // Make it look like a clickable link
-                                        .padding(.top, 5)
+                                // Wrap the flag image with NavigationLink
+                                NavigationLink(destination: CurrencyFlagDetailView(currency: currency, flagImageNames: [currency + "Flag", currency.lowercased() + "1", currency.lowercased() + "2", currency.lowercased() + "3", currency.lowercased() + "4", currency.lowercased() + "5", currency.lowercased() + "6", currency.lowercased() + "7", currency.lowercased() + "8"])) {
+                                    Text(flags[currency] ?? "") // Display the country flag as a clickable link
+                                        .font(.system(size: 50))  // Set font size for the flag emoji
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding()
                                 }
+
+                                // Display the country name below the flag
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
                     .padding()
                 }
+
             }
         }
     }
