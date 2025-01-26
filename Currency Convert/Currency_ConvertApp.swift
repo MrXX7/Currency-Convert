@@ -13,7 +13,9 @@ struct Currency_ConvertApp: App {
     
     var body: some Scene {
         WindowGroup {
-            CurrencyConvertView(isDarkMode: $isDarkMode)
+//            CurrencyConvertView(isDarkMode: $isDarkMode)
+//                .preferredColorScheme(isDarkMode ? .dark : .light)
+            ContentView()
                 .preferredColorScheme(isDarkMode ? .dark : .light)
         }
     }

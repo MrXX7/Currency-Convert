@@ -99,11 +99,11 @@ struct CurrencyConvertView: View {
                                 .transition(.slide)
                                 .animation(.easeInOut)
                         }
-                        Text("© 2023 Öncü Can. All rights reserved.")
-                                            .font(.footnote)
-                                            .foregroundColor(.gray)
-                                            .padding(.bottom, 20)
-                                            .frame(maxWidth: .infinity, alignment: .center)
+//                        Text("© 2023 Öncü Can. All rights reserved.")
+//                                            .font(.footnote)
+//                                            .foregroundColor(.gray)
+//                                            .padding(.bottom, 20)
+//                                            .frame(maxWidth: .infinity, alignment: .center)
                     }
                     .frame(maxWidth: .infinity)
                 }

@@ -14,7 +14,7 @@ struct AmountInputView: View {
         TextField("Enter Amount", text: $euroAmount)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .keyboardType(.decimalPad)
-            .font(.footnote)
+            .font(.headline)
             .onTapGesture {
                 UIApplication.shared.windows.first?.endEditing(true)
             }
