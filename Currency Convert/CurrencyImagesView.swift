@@ -25,7 +25,7 @@ struct CurrencyImagesView: View {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                         ForEach(currencies, id: \.self) { currency in
                             NavigationLink(
-                                destination: CurrencyFlagDetailView(currency: currency, flag: flags[currency] ?? ""),
+                                destination: CurrencyFlagDetailView(currency: currency, flagImageName: currency),
                                 label: {
                                     VStack {
                                         Text(flags[currency] ?? "")
@@ -46,6 +46,7 @@ struct CurrencyImagesView: View {
         }
     }
 }
+
 
 
 #Preview {

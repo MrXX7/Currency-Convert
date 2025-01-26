@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CurrencyFlagDetailView: View {
     var currency: String
-    var flag: String
+    var flagImageName: String
 
     var body: some View {
         VStack {
@@ -17,8 +17,11 @@ struct CurrencyFlagDetailView: View {
                 .font(.title)
                 .padding(.top)
 
-            Text(flag)
-                .font(.system(size: 200)) // Larger size for the flag
+            // Display the flag image based on the image name
+            Image(flagImageName)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 250)
                 .padding()
 
             Spacer()
@@ -26,4 +29,5 @@ struct CurrencyFlagDetailView: View {
         .navigationBarTitle(Text(currency), displayMode: .inline)
     }
 }
+
 
