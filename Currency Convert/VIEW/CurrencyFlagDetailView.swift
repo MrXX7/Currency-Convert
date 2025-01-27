@@ -12,43 +12,66 @@ struct CurrencyFlagDetailView: View {
     var flagImageNames: [String]
 
     @State private var selectedIndex = 0
+    @State private var showFullScreenImage = false // Tam ekran görüntüleme
 
     var body: some View {
         VStack {
-            Text(currency)
-                .font(.title)
-                .padding()
-
-            // Use TabView with page style for horizontal swiping between images
             TabView(selection: $selectedIndex) {
                 ForEach(0..<flagImageNames.count, id: \.self) { index in
                     Image(flagImageNames[index])
                         .resizable()
                         .scaledToFit()
-                        .frame(width: UIScreen.main.bounds.width) // Ensure image fills the screen width
+                        .frame(width: UIScreen.main.bounds.width)
                         .clipped()
-                        .tag(index) // Assign a tag to each page for proper navigation
+                        .tag(index)
                         .rotation3DEffect(
-                            .degrees(Double(selectedIndex - index) * 20), // Rotate images based on selected index
-                            axis: (x: 0, y: 1, z: 0) // Apply the effect on the Y-axis (horizontal)
+                            .degrees(Double(selectedIndex - index) * 20),
+                            axis: (x: 0, y: 1, z: 0)
                         )
-                        .opacity(selectedIndex == index ? 1 : 0.7) // Fading effect for non-selected images
-                        .animation(.easeInOut(duration: 0.5), value: selectedIndex) // Smooth transition effect
+                        .opacity(selectedIndex == index ? 1 : 0.7)
+                        .animation(.easeInOut(duration: 0.5), value: selectedIndex)
+                        .onTapGesture {
+                            showFullScreenImage = true // Tam ekran görseli aç
+                        }
                 }
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // Hide default page indicator
-            .frame(height: 250) // Set the desired height for images
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .frame(height: 300)
 
             Spacer()
+        }
+        .sheet(isPresented: $showFullScreenImage) {
+            ZoomableImageView(imageName: flagImageNames[selectedIndex])
         }
         .navigationBarTitle(Text(currency), displayMode: .inline)
     }
 }
 
+struct ZoomableImageView: View {
+    let imageName: String
+    @State private var scale: CGFloat = 1.0
 
-#Preview {
-    CurrencyFlagDetailView(currency: "CAD", flagImageNames: ["CADFlag", "cad1", "cad2", "cad3"])
+    var body: some View {
+        Image(imageName)
+            .resizable()
+            .scaledToFit()
+            .scaleEffect(scale)
+            .gesture(
+                MagnificationGesture()
+                    .onChanged { value in
+                        scale = value.magnitude
+                    }
+                    .onEnded { _ in
+                        if scale < 1.0 {
+                            scale = 1.0 // Minimum zoom
+                        }
+                    }
+            )
+            .animation(.easeInOut, value: scale)
+    }
 }
+
+
 
 
 
