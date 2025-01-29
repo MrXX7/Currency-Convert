@@ -39,7 +39,6 @@ struct CurrencyConvertView: View {
                             DarkModeToggleButton(isDarkMode: $isDarkMode)
                         }
                         .padding(.horizontal, 10)
-                        .preferredColorScheme(isDarkMode ? .dark : .light)
                         
                         // Currency Selection Header
                         Text("Choose Your Currency")
