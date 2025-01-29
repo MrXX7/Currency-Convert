@@ -15,7 +15,7 @@ struct DarkModeToggleButton: View {
             isDarkMode.toggle()
         }) {
             Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
-                .foregroundColor(isDarkMode ? .white : .black)
+                .foregroundColor(isDarkMode ? .white : .yellow) // Set sun icon to yellow in light mode
         }
     }
 }
