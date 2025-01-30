@@ -10,29 +10,16 @@ import SwiftUI
 struct TotalAmountView: View {
     var convertedAmount: Double
     var selectedCurrency: String
-
-    @State private var animatedConvertedAmount: Double = 0
-
+    
     var body: some View {
-        HStack {
-            Text("Total Amount: \(animatedConvertedAmount, specifier: "%.2f") \(selectedCurrency)")
-                .padding(.vertical)
-                .font(.title3)
-                .onAppear {
-                    withAnimation(.spring()) {
-                        animatedConvertedAmount = convertedAmount
-                    }
-                }
-                .onChange(of: convertedAmount) { newValue in
-                    withAnimation(.spring()) {
-                        animatedConvertedAmount = newValue
-                    }
-                }
-            Spacer()
-        }
-        .onTapGesture {
-            UIApplication.shared.windows.first?.endEditing(true)
-        }
+        Text("\(convertedAmount, specifier: "%.2f") \(selectedCurrency)")
+            .font(.largeTitle)
+            .fontWeight(.semibold)
+            .foregroundColor(convertedAmount >= 0 ? .green : .red)
+            .padding(8)
+            .background(Color(.systemBackground))
+            .cornerRadius(8)
+            .shadow(radius: 3) 
     }
 }
 
