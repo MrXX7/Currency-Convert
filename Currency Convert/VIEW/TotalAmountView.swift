@@ -13,8 +13,8 @@ struct TotalAmountView: View {
     
     var body: some View {
         Text("\(convertedAmount, specifier: "%.2f") \(selectedCurrency)")
-            .font(.largeTitle)
-            .fontWeight(.semibold)
+            .font(.title)
+            .fontWeight(.medium)
             .foregroundColor(convertedAmount >= 0 ? .green : .red)
             .padding(8)
             .background(Color(.systemBackground))
