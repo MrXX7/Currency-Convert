@@ -28,6 +28,7 @@ struct ContentView: View {
             Spacer()
         }
         .edgesIgnoringSafeArea(.bottom)
+        .animation(.easeInOut(duration: 0.5), value: isDarkModee)
         .preferredColorScheme(isDarkModee ? .dark : .light) // Burada preferredColorScheme kullanın
     }
 }

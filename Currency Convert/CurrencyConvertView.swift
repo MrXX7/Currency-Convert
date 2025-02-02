@@ -75,7 +75,7 @@ struct CurrencyConvertView: View {
                         
                         // Total Amount and Reset Button
                         HStack {
-                            TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex])
+                            TotalAmountView(convertedAmount: convertedAmount, selectedCurrency: currencies[selectedCurrencyIndex], isDarkMode: $isDarkMode)
                                                         Spacer()
                             ResetButton(euroAmount: $euroAmount,
                                         customExchangeRate: $customExchangeRate,

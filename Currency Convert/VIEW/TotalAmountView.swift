@@ -10,6 +10,7 @@ import SwiftUI
 struct TotalAmountView: View {
     var convertedAmount: Double
     var selectedCurrency: String
+    @Binding var isDarkMode: Bool
     
     var body: some View {
         Text("\(convertedAmount, specifier: "%.2f") \(selectedCurrency)")
@@ -21,7 +22,8 @@ struct TotalAmountView: View {
             .cornerRadius(8)
             .shadow(radius: 3)
             .transition(.scale) // Animasyon ekle
-            .animation(.easeInOut, value: convertedAmount) // Değer değiştiğinde animasyon tetikle
+            .animation(.easeInOut(duration: 0.5), value: isDarkMode)
+        
     }
 }
 
