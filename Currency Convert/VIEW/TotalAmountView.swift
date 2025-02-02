@@ -19,7 +19,9 @@ struct TotalAmountView: View {
             .padding(8)
             .background(Color(.systemBackground))
             .cornerRadius(8)
-            .shadow(radius: 3) 
+            .shadow(radius: 3)
+            .transition(.scale) // Animasyon ekle
+            .animation(.easeInOut, value: convertedAmount) // Değer değiştiğinde animasyon tetikle
     }
 }
 
