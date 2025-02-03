@@ -23,18 +23,18 @@ struct CurrencyImagesView: View {
                             VStack {
                                 // Wrap the flag image with NavigationLink
                                 NavigationLink(destination: CurrencyFlagDetailView(currency: currency,
-                                    flagImageNames: [
-                                        currency + "Flag",
-                                        currency.lowercased() + "1",
-                                        currency.lowercased() + "2",
-                                        currency.lowercased() + "3",
-                                        currency.lowercased() + "4",
-                                        currency.lowercased() + "5",
-                                        currency.lowercased() + "6",
-                                        currency.lowercased() + "7",
-                                        currency.lowercased() + "8"
-                                    ].filter { UIImage(named: $0) != nil } // Filter out invalid image names
-                                )) {
+                                                                                   flagImageNames: [
+                                                                                    currency + "Flag",
+                                                                                    currency.lowercased() + "1",
+                                                                                    currency.lowercased() + "2",
+                                                                                    currency.lowercased() + "3",
+                                                                                    currency.lowercased() + "4",
+                                                                                    currency.lowercased() + "5",
+                                                                                    currency.lowercased() + "6",
+                                                                                    currency.lowercased() + "7",
+                                                                                    currency.lowercased() + "8"
+                                                                                   ].filter { UIImage(named: $0) != nil } // Filter out invalid image names
+                                                                                  )) {
                                     // Center the flag and increase the size
                                     Text(flags[currency] ?? "")
                                         .font(.system(size: 70))  // Increased size for flags
@@ -42,7 +42,7 @@ struct CurrencyImagesView: View {
                                         .padding()
                                         .background(Color.gray.opacity(0.2), in: RoundedRectangle(cornerRadius: 10)) // Optional background
                                 }
-
+                                
                                 // Display the country name below the flag
                                 Text(currency)
                                     .font(.subheadline)

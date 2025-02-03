@@ -113,7 +113,7 @@ struct CurrencyConvertView: View {
                 .frame(minHeight: geometry.size.height)
                 .padding(.bottom, keyboard.currentHeight)
                 .animation(.easeOut(duration: 0.6))
-                .edgesIgnoringSafeArea(.bottom)
+                .edgesIgnoringSafeArea(.all)
             }
         }
         .onAppear {

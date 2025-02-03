@@ -21,7 +21,7 @@ struct TotalAmountView: View {
             .background(Color(.systemBackground))
             .cornerRadius(8)
             .shadow(radius: 3)
-            .transition(.scale) // Animasyon ekle
+            .transition(.scale) 
             .animation(.easeInOut(duration: 0.5), value: isDarkMode)
         
     }
