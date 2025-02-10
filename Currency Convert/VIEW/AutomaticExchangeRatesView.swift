@@ -11,6 +11,14 @@ struct AutomaticExchangeRatesView: View {
    @Environment(\.colorScheme) var colorScheme
    var automaticExchangeRates: [String]
    var selectedCurrency: String
+   
+   private var leftRates: [String] {
+       Array(automaticExchangeRates.prefix(4))
+   }
+   
+   private var rightRates: [String] {
+       Array(automaticExchangeRates.suffix(4))
+   }
 
    var body: some View {
        VStack {
@@ -19,16 +27,23 @@ struct AutomaticExchangeRatesView: View {
                .foregroundColor(colorScheme == .dark ? .white : .black)
                .padding(.bottom, 10)
            
-           LazyVGrid(columns: [
-               GridItem(.flexible(), spacing: 10),
-               GridItem(.flexible(), spacing: 10)
-           ], spacing: 8) {
-               ForEach(automaticExchangeRates, id: \.self) { rate in
-                   Text(rate)
-                       .font(.subheadline)
-                       .foregroundColor(colorScheme == .dark ? .gray : .black)
-                       .frame(maxWidth: .infinity, alignment: .leading)
-                       .padding(.horizontal, 5)
+           HStack {
+               VStack(alignment: .leading) {
+                   ForEach(leftRates, id: \.self) { rate in
+                       Text(rate)
+                           .font(.subheadline)
+                           .foregroundColor(colorScheme == .dark ? .gray : .black)
+                   }
+               }
+               
+               Spacer()
+               
+               VStack(alignment: .leading) {
+                   ForEach(rightRates, id: \.self) { rate in
+                       Text(rate)
+                           .font(.subheadline)
+                           .foregroundColor(colorScheme == .dark ? .gray : .black)
+                   }
                }
            }
            .padding(.horizontal, 10)
