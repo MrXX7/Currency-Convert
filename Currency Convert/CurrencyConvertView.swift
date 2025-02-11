@@ -104,7 +104,7 @@ struct CurrencyConvertView: View {
                         Text("© 2023 Öncü Can. All rights reserved.")
                                             .font(.footnote)
                                             .foregroundColor(.gray)
-                                            .padding(.bottom, 20)
+                                            .padding(.bottom, 0)
                                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                     .frame(maxWidth: .infinity)
