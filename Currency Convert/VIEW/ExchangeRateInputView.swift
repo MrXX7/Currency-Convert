@@ -20,14 +20,18 @@ struct ExchangeRateInputView: View {
                     .font(.headline)
                     .keyboardType(.decimalPad)
                     .onChange(of: customExchangeRate) { newValue in
-                        // Sadece sayılar ve tek nokta karakterine izin ver
-                        let filtered = newValue.filter { "0123456789.".contains($0) }
+                        // Sayılar, nokta ve virgüle izin ver
+                        let filtered = newValue.filter { "0123456789.,".contains($0) }
                         if filtered != newValue {
                             customExchangeRate = filtered
                         }
-                        // Maksimum 2 nokta kontrolü
-                        if filtered.filter({ $0 == "." }).count > 1 {
-                            customExchangeRate = String(filtered.prefix(while: { $0 != "." })) + "."
+                        // Maksimum 1 adet nokta veya virgül kontrolü
+                        let decimalCount = filtered.filter({ $0 == "." || $0 == "," }).count
+                        if decimalCount > 1 {
+                            if let firstDecimal = filtered.first(where: { $0 == "." || $0 == "," }) {
+                                let upToDecimal = String(filtered.prefix(while: { $0 != "." && $0 != "," }))
+                                customExchangeRate = upToDecimal + String(firstDecimal)
+                            }
                         }
                         // Maksimum 10 karakter sınırı
                         if filtered.count > 10 {
