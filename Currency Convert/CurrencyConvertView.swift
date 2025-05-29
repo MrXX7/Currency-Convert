@@ -101,7 +101,7 @@ struct CurrencyConvertView: View {
                                 .transition(.slide)
                                 .animation(.easeInOut)
                         }
-                        Text("© 2023 Öncü Can. All rights reserved.")
+                        Text("© 2025 Öncü Can. All rights reserved.")
                                             .font(.footnote)
                                             .foregroundColor(.gray)
                                             .padding(.bottom, 0)
