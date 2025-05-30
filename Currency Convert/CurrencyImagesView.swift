@@ -15,7 +15,7 @@ struct CurrencyImagesView: View {
     ]
     
     var body: some View {
-        NavigationView {  // Wrap your view inside a NavigationView
+        NavigationView { // Wrap your view inside a NavigationView
             VStack {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
@@ -23,7 +23,7 @@ struct CurrencyImagesView: View {
                             VStack {
                                 // Wrap the flag image with NavigationLink
                                 NavigationLink(destination: CurrencyFlagDetailView(currency: currency,
-                                                                                   flagImageNames: [
+                                                                                 flagImageNames: [
                                                                                     currency + "Flag",
                                                                                     currency.lowercased() + "1",
                                                                                     currency.lowercased() + "2",
@@ -33,14 +33,24 @@ struct CurrencyImagesView: View {
                                                                                     currency.lowercased() + "6",
                                                                                     currency.lowercased() + "7",
                                                                                     currency.lowercased() + "8"
-                                                                                   ].filter { UIImage(named: $0) != nil } // Filter out invalid image names
-                                                                                  )) {
+                                                                                 ].filter { UIImage(named: $0) != nil } // Filter out invalid image names
+                                )) {
                                     // Center the flag and increase the size
                                     Text(flags[currency] ?? "")
-                                        .font(.system(size: 70))  // Increased size for flags
+                                        .font(.system(size: 70)) // Increased size for flags
                                         .frame(maxWidth: .infinity, alignment: .center)
                                         .padding()
                                         .background(Color.gray.opacity(0.2), in: RoundedRectangle(cornerRadius: 10)) // Optional background
+                                        .scaleEffect(1.0) // Initial scale
+                                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: true) // Apply spring animation on tap
+                                        .simultaneousGesture(
+                                            TapGesture()
+                                                .onEnded { _ in
+                                                    // Trigger a subtle haptic feedback
+                                                    let generator = UIImpactFeedbackGenerator(style: .light)
+                                                    generator.impactOccurred()
+                                                }
+                                        )
                                 }
                                 
                                 // Display the country name below the flag
@@ -54,6 +64,7 @@ struct CurrencyImagesView: View {
                     .padding()
                 }
             }
+            .navigationTitle("Currency Flags") // Add a navigation title
         }
     }
 }
