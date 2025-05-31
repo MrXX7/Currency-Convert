@@ -14,56 +14,67 @@ struct ResetButton: View {
     @Binding var selectedRateCurrencyIndex: Int
     @Binding var showAllConversions: Bool
     
-    // Animasyon durumu
+    // Animation state for the button icon
     @State private var isAnimating = false
+    // State to show checkmark after reset
+    @State private var showCheckmark = false
     
     var body: some View {
         Button(action: {
-            // Değişkenleri sıfırla
+            // Reset variables
             euroAmount = ""
             customExchangeRate = ""
             selectedCurrencyIndex = 0
             selectedRateCurrencyIndex = 0
             showAllConversions = false
             
-            // Dokunmatik geri bildirim
+            // Haptic feedback
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
             
-            // Animasyon tetikle
+            // Trigger animation
             withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
                 isAnimating = true
             }
             
-            // Animasyonu sıfırla
+            // Show checkmark and reset animations after a delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 isAnimating = false
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showCheckmark = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Show checkmark for 1 second
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showCheckmark = false
+                    }
+                }
             }
         }) {
             HStack(spacing: 12) {
-                Image(systemName: "arrow.counterclockwise.circle.fill")
+                // Icon changes based on showCheckmark state
+                Image(systemName: showCheckmark ? "checkmark.circle.fill" : "arrow.counterclockwise.circle.fill")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(isAnimating ? Color.accentColor : Color.secondary) // Animasyon sırasında renk değişimi
-                    .rotationEffect(.degrees(isAnimating ? 360 : 0)) // Dönme animasyonu
+                    .foregroundColor(showCheckmark ? .green : (isAnimating ? Color.accentColor : Color.secondary)) // Green for checkmark
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0)) // Rotation animation
                 
-                Text("Reset")
+                Text(showCheckmark ? "Done!" : "Reset") // Text changes to "Done!"
                     .font(.headline.weight(.medium))
-                    .foregroundColor(Color.primary) // Dinamik metin rengi
+                    .foregroundColor(Color.primary) // Dynamic text color
             }
             .padding(.vertical, 14)
             .padding(.horizontal, 28)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(UIColor.systemGray6)) // Açık gri arka plan
-                    .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4) // Yumuşak gölge
+                    .fill(Color(UIColor.systemGray6)) // Light gray background
+                    .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4) // Soft shadow
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(Color.accentColor.opacity(0.5), lineWidth: 2) // Vurgulu kenarlık
+                    .stroke(Color.accentColor.opacity(0.5), lineWidth: 2) // Accent color border
             )
-            .scaleEffect(isAnimating ? 1.05 : 1.0) // Hafif büyüme animasyonu
+            .scaleEffect(isAnimating ? 1.05 : 1.0) // Slight grow animation
         }
-        .buttonStyle(PlainButtonStyle()) // Varsayılan stilin üzerine yaz
+        .buttonStyle(PlainButtonStyle()) // Override default style
     }
 }
 
