@@ -9,84 +9,76 @@ import SwiftUI
 
 struct CurrencyFlagDetailView: View {
     var currency: String
-    var flagImageNames: [String]
-    
-    @State private var selectedIndex = 0
-    @State private var showFullScreenImage = false
+    var flagImageNames: [String] // Array of image names for the selected currency
+    @Environment(\.presentationMode) var presentationMode // To dismiss the view
     
     var body: some View {
         VStack {
-            TabView(selection: $selectedIndex) {
-                ForEach(0..<flagImageNames.count, id: \.self) { index in
-                    GeometryReader { geometry in
-                        Image(flagImageNames[index])
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: geometry.size.width * 0.95, height: geometry.size.height * 0.95) // Ekranın %95'ini kapla
-                            .clipped()
-                            .tag(index)
-                            .rotation3DEffect(
-                                .degrees(Double(selectedIndex - index) * 20),
-                                axis: (x: 0, y: 1, z: 0)
-                            )
-                            .opacity(selectedIndex == index ? 1 : 0.7)
-                            .animation(.easeInOut(duration: 0.5), value: selectedIndex)
-                            .onTapGesture {
-                                showFullScreenImage = true
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // TAM ORTALAMA
+            // Navigation Bar with custom title and dismiss button
+            HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                Text("\(currency) Flags")
+                    .font(.title)
+                    .fontWeight(.bold)
+                Spacer()
+                // Placeholder to balance the layout, or can be another action button
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(width: 30, height: 30)
+            }
+            .padding()
+            
+            // Display images horizontally if multiple exist
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 15) { // Spacing between images
+                    ForEach(flagImageNames, id: \.self) { imageName in
+                        if let uiImage = UIImage(named: imageName) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 250, height: 200) // Fixed size for consistency
+                                .cornerRadius(15)
+                                .shadow(radius: 5)
+                                .accessibilityLabel("Flag image for \(currency) - \(imageName)") // Accessibility
+                        } else {
+                            // Fallback for missing images
+                            Image(systemName: "flag.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 250, height: 200)
+                                .foregroundColor(.gray)
+                                .cornerRadius(15)
+                                .shadow(radius: 5)
+                                .accessibilityLabel("Placeholder flag image for \(currency)")
+                        }
                     }
                 }
+                .padding(.horizontal) // Padding for the scroll view content
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .frame(height: 400) // TabView yüksekliğini artır
-            .padding(.vertical, 20) // Dikey boşluk ekle
+            
+            // Additional Information (Example)
+            VStack(alignment: .leading, spacing: 10) {
+                Text("About \(currency):")
+                    .font(.headline)
+                    .padding(.bottom, 5)
+                
+                Text("This section can include more details about the \(currency) currency, its history, or its economic significance.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding()
             
             Spacer()
         }
-        .sheet(isPresented: $showFullScreenImage) {
-            ZoomableImageView(imageName: flagImageNames[selectedIndex]) {
-                showFullScreenImage = false
-            }
-        }
-        .navigationBarTitle(Text(currency), displayMode: .inline)
-    }
-}
-
-struct ZoomableImageView: View {
-    let imageName: String
-    let onClose: () -> Void
-    @State private var scale: CGFloat = 1.0
-    @State private var lastScale: CGFloat = 1.0
-
-    var body: some View {
-        VStack {
-            Button("Close") {
-                onClose()
-            }
-            .padding()
-
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity) // TAM ORTALAMA
-                .scaleEffect(scale)
-                .gesture(
-                    MagnificationGesture()
-                        .onChanged { value in
-                            let delta = value / lastScale
-                            lastScale = value
-                            scale *= delta
-                        }
-                        .onEnded { _ in
-                            if scale < 1.0 {
-                                scale = 1.0 // Minimum zoom
-                            }
-                            lastScale = 1.0
-                        }
-                )
-                .animation(.easeInOut, value: scale)
-        }
+        .navigationBarHidden(true) // Hide default navigation bar
     }
 }
 
