@@ -9,70 +9,38 @@ import SwiftUI
 
 struct AmountInputView: View {
     @Binding var euroAmount: String
-    // State to control focus on the TextField
-    @FocusState private var isInputActive: Bool
-    
+    @FocusState private var isAmountInputFocused: Bool
+
     var body: some View {
-        HStack {
-            TextField("Enter Amount", text: $euroAmount)
+        VStack {
+            TextField("Enter amount in EUR", text: $euroAmount)
                 .keyboardType(.decimalPad)
-                .font(.headline)
-                .focused($isInputActive) // Apply focus state
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+                .multilineTextAlignment(.center)
+                .padding()
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                .focused($isAmountInputFocused) // TextField'ı isAmountInputFocused ile ilişkilendirir
+                // .onAppear { // Bu blok artık yok
+                //    isAmountInputFocused = true // Bu satır artık yok
+                // }
                 .onChange(of: euroAmount) { newValue in
-                    // Allow only numbers and a single decimal separator (dot or comma)
-                    let filtered = newValue.filter { "0123456789,.".contains($0) }
-                    
-                    // Replace comma with dot for consistent double conversion
-                    let standardized = filtered.replacingOccurrences(of: ",", with: ".")
-                    
-                    // Ensure only one decimal point
-                    if standardized.components(separatedBy: ".").count > 2 {
-                        let parts = standardized.components(separatedBy: ".")
-                        euroAmount = parts[0] + "." + parts.dropFirst().joined()
-                    } else {
-                        euroAmount = standardized
+                    // Ensure only valid decimal numbers are entered
+                    let filtered = newValue.filter { "0123456789.,".contains($0) }
+                    if filtered != newValue {
+                        euroAmount = filtered
                     }
-                    
-                    // Optional: Limit to a reasonable number of decimal places (e.g., 4)
-                    if let decimalIndex = euroAmount.firstIndex(of: ".") {
-                        let afterDecimal = euroAmount.suffix(from: euroAmount.index(after: decimalIndex))
-                        if afterDecimal.count > 4 { // Adjust as needed
-                            euroAmount = String(euroAmount.prefix(upTo: euroAmount.index(decimalIndex, offsetBy: 5)))
-                        }
+                    // Allow only one decimal separator
+                    let decimalCount = newValue.filter { $0 == "." || $0 == "," }.count
+                    if decimalCount > 1 {
+                        euroAmount = String(newValue.dropLast())
                     }
                 }
-            
-            if !euroAmount.isEmpty {
-                Button(action: {
-                    euroAmount = ""
-                    // Dismiss keyboard when amount is cleared
-                    isInputActive = false
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                }
-            }
         }
-        .frame(height: 35) // Fixed height for consistency
-        .frame(maxWidth: .infinity) // Max width for proper alignment
-        .padding(.horizontal, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                // Dynamically change border color based on focus
-                .stroke(isInputActive ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: isInputActive ? 2 : 1)
-        )
-        .animation(.easeOut(duration: 0.2), value: isInputActive) // Animate border color change
-        .onAppear {
-            // Automatically focus the text field when the view appears
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Small delay to ensure view is ready
-                self.isInputActive = true
-            }
-        }
-        // Dismiss keyboard when tapping outside
-        .contentShape(Rectangle()) // Make the entire VStack tappable for dismissing keyboard
-        .onTapGesture {
-            isInputActive = false // Dismiss keyboard
-        }
+        .padding(.horizontal)
     }
 }
 
