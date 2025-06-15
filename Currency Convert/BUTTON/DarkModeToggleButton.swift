@@ -23,31 +23,30 @@ struct DarkModeToggleButton: View {
             HStack {
                 // Dynamically change icon based on dark mode state
                 Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
-                    .font(.title2) // Slightly larger icon
-                    .foregroundColor(isDarkMode ? .yellow : .orange) // Yellow for moon, orange for sun
-                    .symbolRenderingMode(.multicolor) // For multi-color symbols (e.g., sun.max.fill)
-                    .rotationEffect(.degrees(isDarkMode ? 360 : 0)) // Spin animation on toggle
+                    .font(.title3) // İkon boyutunu küçülttük
+                    .foregroundColor(isDarkMode ? .yellow : .orange)
+                    .symbolRenderingMode(.multicolor)
+                    .rotationEffect(.degrees(isDarkMode ? 360 : 0))
                 
                 Text(isDarkMode ? "Dark Mode" : "Light Mode")
-                    .font(.headline)
+                    .font(.subheadline) // Metin boyutunu küçülttük
                     .fontWeight(.medium)
-                    .foregroundColor(.primary) // Adapts to light/dark mode
+                    .foregroundColor(.primary)
             }
-            .padding(.vertical, 10)
-            .padding(.horizontal, 18)
+            .padding(.vertical, 8) // Dikey dolguyu biraz küçülttük
+            .padding(.horizontal, 14) // Yatay dolguyu belirgin şekilde küçülttük
             .background(
-                RoundedRectangle(cornerRadius: 15) // Rounded background
-                    .fill(Color(UIColor.systemGray5)) // Neutral background color
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color(UIColor.systemGray5))
                     .shadow(color: Color.black.opacity(isDarkMode ? 0.2 : 0.1),
                             radius: isDarkMode ? 8 : 4,
                             x: 0,
-                            y: isDarkMode ? 4 : 2) // Dynamic shadow based on mode
+                            y: isDarkMode ? 4 : 2)
             )
-            .scaleEffect(isDarkMode ? 1.05 : 1.0) // Slight grow effect when dark mode is active
-            .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isDarkMode) // Animation for scale effect
+            .scaleEffect(isDarkMode ? 1.05 : 1.0)
+            .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isDarkMode)
         }
-        .buttonStyle(PlainButtonStyle()) // Ensure no default button styling interferes
+        .buttonStyle(PlainButtonStyle())
     }
 }
-
 
