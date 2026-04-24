@@ -8,36 +8,60 @@
 import SwiftUI
 
 struct TotalAmountView: View {
-    var convertedAmount: Double
-    var selectedCurrency: String
-    @Binding var isDarkMode: Bool
-    
-    // State to trigger animation on amount change
-    @State private var animateAmount: Bool = false
-    
+    let formattedAmount: String
+    let baseCurrency: CurrencyDefinition
+    let targetCurrency: CurrencyDefinition
+    let amountValue: Double?
+    let appliedRate: Double?
+
     var body: some View {
-        Text("\(convertedAmount, specifier: "%.2f") \(selectedCurrency)")
-            .font(.title)
-            .fontWeight(.medium)
-            .foregroundColor(convertedAmount >= 0 ? .green : .red)
-            .padding(8)
-            .background(Color(.systemBackground))
-            .cornerRadius(8)
-            .shadow(radius: 3)
-            // Apply scale effect based on animation state
-            .scaleEffect(animateAmount ? 1.05 : 1.0)
-            .animation(.spring(response: 0.3, dampingFraction: 0.5), value: animateAmount)
-            .animation(.easeInOut(duration: 0.5), value: isDarkMode)
-            .onChange(of: convertedAmount) { _ in
-                // Toggle animateAmount to trigger the animation
-                animateAmount = true
-                // Reset animateAmount after a short delay to allow re-triggering
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    animateAmount = false
-                }
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Result")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+
+            Text(formattedAmount)
+                .font(.system(size: 34, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+
+            HStack(spacing: 12) {
+                summaryPill(title: "From", value: "\(baseCurrency.flag) \(baseCurrency.code)")
+                summaryPill(title: "To", value: "\(targetCurrency.flag) \(targetCurrency.code)")
+                summaryPill(title: "Rate", value: appliedRateText)
             }
+
+            if let amountValue {
+                Text("\(AmountConverter.formattedAmount(amountValue, currencyCode: baseCurrency.code)) converts instantly using the active rate.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Enter an amount to see the live conversion.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var appliedRateText: String {
+        guard let appliedRate else {
+            return "--"
+        }
+
+        return String(format: "%.4f", appliedRate)
+    }
+
+    private func summaryPill(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title.uppercased())
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.subheadline.weight(.semibold))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Color.black.opacity(0.04), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }
-
-
-

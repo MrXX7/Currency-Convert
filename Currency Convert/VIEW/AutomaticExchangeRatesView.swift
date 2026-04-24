@@ -8,49 +8,41 @@
 import SwiftUI
 
 struct AutomaticExchangeRatesView: View {
-    @Environment(\.colorScheme) var colorScheme // Accesses the current color scheme (light/dark)
-    var automaticExchangeRates: [String] // Array of formatted exchange rate strings (e.g., "🇪🇺 = 1.0000 EUR")
-    var selectedCurrency: String // The base currency for which rates are displayed (e.g., "EUR")
-    
-    // Defines a grid with two flexible columns
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    let automaticExchangeRates: [CurrencyRate]
+    let selectedCurrency: CurrencyDefinition
+
+    private let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) { // Increased spacing for better visual separation
-            Text("\(selectedCurrency) Exchange Rates")
-                .font(.title2) // Slightly larger and more prominent title
-                .fontWeight(.bold) // Bold font for the title
-                .foregroundColor(colorScheme == .dark ? .white : .black)
-                .padding(.bottom, 5) // Padding below the title
-            
-            // Display rates in a two-column grid
-            LazyVGrid(columns: columns, spacing: 10) { // Grid for two columns
-                ForEach(automaticExchangeRates, id: \.self) { rate in
-                    Text(rate)
-                        .font(.subheadline) // Consistent font size
-                        .foregroundColor(colorScheme == .dark ? .gray : .black)
-                        .frame(maxWidth: .infinity, alignment: .leading) // Ensure left alignment in grid cell
+        VStack(alignment: .leading, spacing: 16) {
+            Text("\(selectedCurrency.code) Rate Board")
+                .font(.system(.title3, design: .rounded, weight: .semibold))
+
+            Text("Live indicative rates from the selected base currency.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(automaticExchangeRates) { rate in
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(rate.currency.flag)
+                            Text(rate.currency.code)
+                                .font(.headline)
+                        }
+
+                        Text(String(format: "%.4f", rate.rate))
+                            .font(.title3.weight(.bold))
+
+                        Text(rate.currency.name)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(14)
+                    .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 }
             }
-            .padding(.horizontal) // Add horizontal padding for the grid content
-            
-            Spacer() // Pushes content to the top
-        }
-        .padding(.leading, 10) // Overall leading padding for the VStack
-        .onTapGesture {
-            // Dismiss keyboard when tapping anywhere on this view
-            UIApplication.shared.windows.first?.endEditing(true)
         }
     }
 }
-
-
-
-
-
-
-
-

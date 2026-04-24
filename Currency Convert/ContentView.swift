@@ -9,44 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     @Binding var isDarkModee: Bool
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     var body: some View {
-        VStack {
-            TabView {
-                // First Tab (Currency Converter)
-                CurrencyConvertView(isDarkMode: $isDarkModee)
-                    .tabItem {
-                        Label("Converter", systemImage: "dollarsign.circle")
-                    }
+        TabView {
+            CurrencyConvertView(isDarkMode: $isDarkModee)
+                .tabItem {
+                    Label("Convert", systemImage: "arrow.left.arrow.right.circle.fill")
+                }
 
-                // Second Tab (Currency Flags)
-                CurrencyImagesView()
-                    .tabItem {
-                        Label("Banknotes", systemImage: "note.text")
-                    }
-            }
-            
-            Spacer()
+            CurrencyImagesView()
+                .tabItem {
+                    Label("Library", systemImage: "rectangle.stack.fill")
+                }
         }
-        .edgesIgnoringSafeArea(.all)
-        .animation(.easeInOut(duration: 0.5), value: isDarkModee)
         .preferredColorScheme(isDarkModee ? .dark : .light)
-        .environment(\.sizeCategory, .large)    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ContentView(isDarkModee: .constant(true))
-                .previewDevice("iPhone SE (3rd generation)")
-            
-            ContentView(isDarkModee: .constant(true))
-                .previewDevice("iPhone 16 Pro")
-            
-            ContentView(isDarkModee: .constant(true))
-                .previewDevice("iPad Pro (12.9-inch) (6th generation)")
-        }
     }
 }
 
+#Preview("Light") {
+    ContentView(isDarkModee: .constant(false))
+}
+
+#Preview("Dark") {
+    ContentView(isDarkModee: .constant(true))
+}

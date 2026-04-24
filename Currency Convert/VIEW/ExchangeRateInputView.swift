@@ -9,57 +9,35 @@ import SwiftUI
 
 struct ExchangeRateInputView: View {
     @Binding var customExchangeRate: String
-    
+    let targetCurrency: String
+
     var body: some View {
-        HStack {
-            Text("Custom Exchange Rate:")
-                .font(.footnote)
-            
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                TextField("Enter Rate", text: $customExchangeRate)
+                Text("Manual Rate")
                     .font(.headline)
-                    .keyboardType(.decimalPad)
-                    .onChange(of: customExchangeRate) { newValue in
-                        // Sayılar, nokta ve virgüle izin ver
-                        let filtered = newValue.filter { "0123456789.,".contains($0) }
-                        if filtered != newValue {
-                            customExchangeRate = filtered
+                Spacer()
+                Text("Optional")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+
+            TextField("Override 1 \(targetCurrency) rate", text: $customExchangeRate)
+                .keyboardType(.decimalPad)
+                .textFieldStyle(.plain)
+                .padding(16)
+                .background(Color.white.opacity(0.7), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(alignment: .trailing) {
+                    if !customExchangeRate.isEmpty {
+                        Button {
+                            customExchangeRate = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                                .padding(.trailing, 14)
                         }
-                        // Maksimum 1 adet nokta veya virgül kontrolü
-                        let decimalCount = filtered.filter({ $0 == "." || $0 == "," }).count
-                        if decimalCount > 1 {
-                            if let firstDecimal = filtered.first(where: { $0 == "." || $0 == "," }) {
-                                let upToDecimal = String(filtered.prefix(while: { $0 != "." && $0 != "," }))
-                                customExchangeRate = upToDecimal + String(firstDecimal)
-                            }
-                        }
-                        // Maksimum 10 karakter sınırı
-                        if filtered.count > 10 {
-                            customExchangeRate = String(filtered.prefix(10))
-                        }
-                    }
-                
-                if !customExchangeRate.isEmpty {
-                    Button(action: {
-                        customExchangeRate = ""
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
                     }
                 }
-            }
-            .padding(8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.3))
-            )
-        }
-        .padding(.vertical, 8)
-        .onTapGesture {
-            UIApplication.shared.windows.first?.endEditing(true)
         }
     }
 }
-
-
-

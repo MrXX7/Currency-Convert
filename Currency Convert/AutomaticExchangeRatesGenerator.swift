@@ -7,21 +7,18 @@
 
 import Foundation
 
-class AutomaticExchangeRatesGenerator {
-    static func generateRates(currencies: [String], exchangeRates: [String: Double], flags: [String: String], baseCurrency: String) -> [String] {
-        var rates = [String]()
-        
-        for currency in currencies {
-            if currency != baseCurrency, let rate = exchangeRates[currency] {
-                let flag = flags[currency] ?? ""
-                let formattedRate = String(format: "%.4f", rate)
-                rates.append("\(flag) = \(formattedRate) \(currency)")
+enum AutomaticExchangeRatesGenerator {
+    static func generateRates(baseCurrencyCode: String, exchangeRates: [String: Double]) -> [CurrencyRate] {
+        CurrencyCatalog.supported
+            .filter { $0.code != baseCurrencyCode }
+            .compactMap { currency in
+                guard let rate = exchangeRates[currency.code] else {
+                    return nil
+                }
+
+                return CurrencyRate(currency: currency, rate: rate)
             }
-        }
-        
-        return rates
+            .sorted { $0.currency.code < $1.currency.code }
     }
 }
-
-
 

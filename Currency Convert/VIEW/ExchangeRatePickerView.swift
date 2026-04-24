@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct ExchangeRatePickerView: View {
-    var currencies: [String]
-    @Binding var selectedRateCurrencyIndex: Int
+    let title: String
+    let subtitle: String
+    let currencies: [CurrencyDefinition]
+    @Binding var selectedCurrencyCode: String
 
     var body: some View {
-        Picker("Select Currency", selection: $selectedRateCurrencyIndex) {
-            ForEach(0..<currencies.count, id: \.self) {
-                Text(self.currencies[$0])
-                    .padding()
-            }
-        }
-        .pickerStyle(SegmentedPickerStyle())
+        CurrencyPickerView(
+            title: title,
+            subtitle: subtitle,
+            currencies: currencies,
+            selectedCurrencyCode: $selectedCurrencyCode
+        )
     }
 }

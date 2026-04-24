@@ -8,40 +8,35 @@
 import SwiftUI
 
 struct AmountInputView: View {
-    @Binding var euroAmount: String
-    @FocusState private var isAmountInputFocused: Bool
+    @Binding var amountInput: String
+    let currency: CurrencyDefinition
+    @FocusState.Binding var isFocused: Bool
 
     var body: some View {
-        VStack {
-            TextField("Enter amount in EUR", text: $euroAmount)
-                .keyboardType(.decimalPad)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-                .multilineTextAlignment(.center)
-                .padding()
-                .background(Color(UIColor.systemGray6))
-                .cornerRadius(15)
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
-                .focused($isAmountInputFocused) // TextField'ı isAmountInputFocused ile ilişkilendirir
-                // .onAppear { // Bu blok artık yok
-                //    isAmountInputFocused = true // Bu satır artık yok
-                // }
-                .onChange(of: euroAmount) { newValue in
-                    // Ensure only valid decimal numbers are entered
-                    let filtered = newValue.filter { "0123456789.,".contains($0) }
-                    if filtered != newValue {
-                        euroAmount = filtered
-                    }
-                    // Allow only one decimal separator
-                    let decimalCount = newValue.filter { $0 == "." || $0 == "," }.count
-                    if decimalCount > 1 {
-                        euroAmount = String(newValue.dropLast())
-                    }
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Amount")
+                .font(.headline)
+
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(currency.code)
+                        .font(.headline.weight(.semibold))
+                    Text(currency.name)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+                .padding(.vertical, 10)
+                .padding(.horizontal, 12)
+                .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+                TextField("0.00", text: $amountInput)
+                    .keyboardType(.decimalPad)
+                    .focused($isFocused)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .multilineTextAlignment(.trailing)
+            }
+            .padding(16)
+            .background(Color.white.opacity(0.7), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
-        .padding(.horizontal)
     }
 }
-
-

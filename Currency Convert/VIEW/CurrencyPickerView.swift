@@ -8,17 +8,59 @@
 import SwiftUI
 
 struct CurrencyPickerView: View {
-    var currencies: [String]
-    @Binding var selectedCurrencyIndex: Int
+    let title: String
+    let subtitle: String
+    let currencies: [CurrencyDefinition]
+    @Binding var selectedCurrencyCode: String
 
     var body: some View {
-        Picker("", selection: $selectedCurrencyIndex) {
-            ForEach(0..<currencies.count, id: \.self) {
-                Text(self.currencies[$0])
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.headline)
+
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 94), spacing: 10)], spacing: 10) {
+                ForEach(currencies) { currency in
+                    Button {
+                        selectedCurrencyCode = currency.code
+                    } label: {
+                        VStack(spacing: 6) {
+                            Text(currency.flag)
+                                .font(.title2)
+                            Text(currency.code)
+                                .font(.subheadline.weight(.semibold))
+                            Text(currency.symbol)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(CurrencyChipButtonStyle(isSelected: selectedCurrencyCode == currency.code))
+                }
             }
         }
-        .pickerStyle(SegmentedPickerStyle())
     }
 }
 
+private struct CurrencyChipButtonStyle: ButtonStyle {
+    let isSelected: Bool
 
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(isSelected ? Color.white : Color.primary)
+            .background(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(isSelected ? Color.accentColor : Color.white.opacity(0.72))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(isSelected ? Color.accentColor : Color.black.opacity(0.06), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.easeOut(duration: 0.18), value: configuration.isPressed)
+    }
+}

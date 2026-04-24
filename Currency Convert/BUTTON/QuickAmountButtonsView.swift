@@ -6,60 +6,65 @@
 //
 
 import SwiftUI
-import Foundation
 
-struct QuickAmountButtonStyle: ButtonStyle {
-    // Indicates if the button is currently selected.
-    var isSelected: Bool
-    // Determines if dark mode is active for appropriate color adjustments.
-    var isDarkMode: Bool
-    
+struct PrimaryCapsuleButtonStyle: ButtonStyle {
+    var isProminent: Bool = false
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 15, weight: .medium)) // Slightly increase font size and weight
-            .padding(.vertical, 10) // Increase vertical padding
-            .padding(.horizontal, 16) // Increase horizontal padding
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(isProminent ? Color.white : Color.primary)
+            .padding(.vertical, 11)
+            .padding(.horizontal, 14)
+            .frame(maxWidth: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: 15) // Use a slightly larger corner radius
-                    .fill(isSelected ? (isDarkMode ? Color.accentColor.opacity(0.8) : Color.accentColor) : Color(UIColor.systemGray5)) // Adjust background color for better contrast
+                Capsule()
+                    .fill(isProminent ? Color.accentColor : Color.white.opacity(0.7))
             )
-            .foregroundColor(isSelected ? .white : (isDarkMode ? .white.opacity(0.8) : .black.opacity(0.8))) // Text color based on selection and dark mode
             .overlay(
-                // Add a subtle border when selected
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(isSelected ? (isDarkMode ? Color.white.opacity(0.3) : Color.white.opacity(0.5)) : Color.clear, lineWidth: isSelected ? 1.5 : 0)
+                Capsule()
+                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
             )
-            .shadow(color: isSelected ? Color.black.opacity(0.2) : Color.black.opacity(0.08),
-                    radius: isSelected ? 6 : 3, // Increase shadow radius for selected state
-                    x: 0,
-                    y: isSelected ? 4 : 2) // Adjust shadow offset
-            .scaleEffect(configuration.isPressed ? 0.95 : 1) // Scale down slightly when pressed
-            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed) // Smooth spring animation for press
-            .animation(.easeInOut(duration: 0.2), value: isSelected) // Smooth transition for selection state
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.easeOut(duration: 0.18), value: configuration.isPressed)
+    }
+}
+
+struct SecondaryCapsuleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(Color.primary)
+            .padding(.vertical, 11)
+            .padding(.horizontal, 14)
+            .frame(maxWidth: .infinity)
+            .background(Color.black.opacity(0.04), in: Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.easeOut(duration: 0.18), value: configuration.isPressed)
     }
 }
 
 struct QuickAmountPickerView: View {
     let quickAmounts: [String]
-    @Binding var euroAmount: String
-    @Environment(\.colorScheme) var colorScheme
-    
+    @Binding var amountInput: String
+
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Quick Select")
+                .font(.headline)
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 10)], spacing: 10) {
                 ForEach(quickAmounts, id: \.self) { amount in
-                    Button(action: {
-                        euroAmount = amount
-                    }) {
-                        Text(amount)
-                            .foregroundColor(euroAmount == amount ? .white : (colorScheme == .dark ? .white : .black))
-                            .frame(minWidth: 40)
+                    Button(amount) {
+                        amountInput = amount
                     }
-                    .buttonStyle(QuickAmountButtonStyle(isSelected: euroAmount == amount,
-                                                     isDarkMode: colorScheme == .dark))
+                    .buttonStyle(PrimaryCapsuleButtonStyle(isProminent: amountInput == amount))
                 }
             }
-            .padding(.vertical, 5)
         }
     }
 }
