@@ -16,6 +16,7 @@ struct CurrencyConversionListView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("All Conversions")
                 .font(.system(.title3, design: .rounded, weight: .semibold))
+                .foregroundStyle(DesignPalette.ink)
 
             if let amountValue {
                 Text("\(AmountConverter.formattedAmount(amountValue, currencyCode: baseCurrency.code)) across every supported destination.")
@@ -31,7 +32,8 @@ struct CurrencyConversionListView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(conversion.currency.flag) \(conversion.currency.code)")
-                            .font(.headline)
+                            .font(.headline.weight(.bold))
+                            .foregroundStyle(DesignPalette.ink)
                         Text(conversion.currency.name)
                             .font(.caption)
                             .foregroundStyle(DesignPalette.mutedInk)
@@ -41,13 +43,15 @@ struct CurrencyConversionListView: View {
 
                     Text(AmountConverter.formattedAmount(conversion.amount, currencyCode: conversion.currency.code))
                         .font(.headline.weight(.semibold))
+                        .foregroundStyle(DesignPalette.accentStrong)
                 }
                 .padding(14)
-                .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
                 )
+                .shadow(color: DesignPalette.shadow, radius: 8, x: 0, y: 4)
             }
         }
     }

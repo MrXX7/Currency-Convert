@@ -159,7 +159,7 @@ struct CurrencyConvertView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Currency Convert")
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(DesignPalette.ink)
 
                     Text("Clean, fast conversion with live exchange data and a clearer layout.")
                         .font(.subheadline)
@@ -191,18 +191,20 @@ struct CurrencyConvertView: View {
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color.white.opacity(0.58))
+                .fill(Color.white.opacity(0.78))
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
                         .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
                 )
         )
+        .shadow(color: DesignPalette.shadow, radius: 14, x: 0, y: 8)
     }
 
     private var converterSection: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Conversion Setup")
                 .font(.system(.title3, design: .rounded, weight: .semibold))
+                .foregroundStyle(DesignPalette.ink)
 
             ExchangeRatePickerView(
                 title: "You have",
@@ -328,6 +330,10 @@ struct CurrencyConvertView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(DesignPalette.accentSoft.opacity(0.85), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(DesignPalette.stroke.opacity(0.75), lineWidth: 1)
+        )
     }
 
     private func lastUpdatedText(from date: Date) -> String {
@@ -349,7 +355,7 @@ private struct CardModifier: ViewModifier {
                             .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
                     )
             )
-            .shadow(color: DesignPalette.accentStrong.opacity(0.10), radius: 18, x: 0, y: 10)
+            .shadow(color: DesignPalette.shadow, radius: 18, x: 0, y: 10)
     }
 }
 

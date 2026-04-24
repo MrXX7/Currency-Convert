@@ -16,6 +16,7 @@ struct ExchangeRateInputView: View {
             HStack {
                 Text("Manual Rate")
                     .font(.headline)
+                    .foregroundStyle(DesignPalette.ink)
                 Spacer()
                 Text("Optional")
                     .font(.caption.weight(.semibold))
@@ -25,12 +26,14 @@ struct ExchangeRateInputView: View {
             TextField("Override 1 \(targetCurrency) rate", text: $customExchangeRate)
                 .keyboardType(.decimalPad)
                 .textFieldStyle(.plain)
+                .foregroundStyle(DesignPalette.ink)
                 .padding(16)
-                .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
                 )
+                .shadow(color: DesignPalette.shadow, radius: 10, x: 0, y: 4)
                 .overlay(alignment: .trailing) {
                     if !customExchangeRate.isEmpty {
                         Button {

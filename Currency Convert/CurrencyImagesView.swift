@@ -54,10 +54,11 @@ struct CurrencyImagesView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Banknotes and Flags")
                 .font(.system(.title2, design: .rounded, weight: .bold))
+                .foregroundStyle(.white)
 
             Text("A cleaner gallery for exploring supported currencies and their visual references.")
                 .font(.subheadline)
-                .foregroundStyle(DesignPalette.ink.opacity(0.72))
+                .foregroundStyle(.white.opacity(0.88))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
@@ -82,11 +83,11 @@ struct CurrencyImagesView: View {
 
             Text(currency.code)
                 .font(.headline.weight(.bold))
-                .foregroundStyle(.primary)
+                .foregroundStyle(DesignPalette.ink)
 
             Text(currency.name)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DesignPalette.mutedInk)
                 .lineLimit(2)
 
             Text(currency.region)
@@ -97,8 +98,8 @@ struct CurrencyImagesView: View {
         .padding(16)
         .background(
             background
-                .fill(DesignPalette.elevatedSurface)
-                .shadow(color: DesignPalette.ink.opacity(0.10), radius: 12, x: 0, y: 8)
+                .fill(DesignPalette.elevatedSurfaceStrong)
+                .shadow(color: DesignPalette.shadow, radius: 12, x: 0, y: 8)
         )
         .overlay(
             background

@@ -22,7 +22,7 @@ struct TotalAmountView: View {
 
             Text(formattedAmount)
                 .font(.system(size: 34, weight: .bold, design: .rounded))
-                .foregroundStyle(DesignPalette.ink)
+                .foregroundStyle(DesignPalette.accentStrong)
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
 
@@ -63,6 +63,10 @@ struct TotalAmountView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
+        )
     }
 }

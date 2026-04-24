@@ -17,6 +17,7 @@ struct AutomaticExchangeRatesView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("\(selectedCurrency.code) Rate Board")
                 .font(.system(.title3, design: .rounded, weight: .semibold))
+                .foregroundStyle(DesignPalette.ink)
 
             Text("Live indicative rates from the selected base currency.")
                 .font(.subheadline)
@@ -28,11 +29,13 @@ struct AutomaticExchangeRatesView: View {
                         HStack {
                             Text(rate.currency.flag)
                             Text(rate.currency.code)
-                                .font(.headline)
+                                .font(.headline.weight(.bold))
+                                .foregroundStyle(DesignPalette.ink)
                         }
 
                         Text(String(format: "%.4f", rate.rate))
                             .font(.title3.weight(.bold))
+                            .foregroundStyle(DesignPalette.accentStrong)
 
                         Text(rate.currency.name)
                             .font(.caption)
@@ -40,11 +43,12 @@ struct AutomaticExchangeRatesView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(14)
-                    .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                     .overlay(
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
                     )
+                    .shadow(color: DesignPalette.shadow, radius: 8, x: 0, y: 4)
                 }
             }
         }

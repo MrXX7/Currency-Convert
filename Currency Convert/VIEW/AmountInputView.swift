@@ -16,6 +16,7 @@ struct AmountInputView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Amount")
                 .font(.headline)
+                .foregroundStyle(DesignPalette.ink)
 
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -27,7 +28,7 @@ struct AmountInputView: View {
                 }
                 .padding(.vertical, 10)
                 .padding(.horizontal, 12)
-                .background(DesignPalette.accentSoft.opacity(0.75), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(DesignPalette.accentSoft, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
 
                 TextField("0.00", text: $amountInput)
                     .keyboardType(.decimalPad)
@@ -37,11 +38,12 @@ struct AmountInputView: View {
                     .foregroundStyle(DesignPalette.ink)
             }
             .padding(16)
-            .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
             )
+            .shadow(color: DesignPalette.shadow, radius: 10, x: 0, y: 4)
         }
     }
 }
