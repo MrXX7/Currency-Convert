@@ -10,6 +10,7 @@ import SwiftUI
 struct ExchangeRateInputView: View {
     @Binding var customExchangeRate: String
     let targetCurrency: String
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -26,6 +27,7 @@ struct ExchangeRateInputView: View {
             TextField("Override 1 \(targetCurrency) rate", text: $customExchangeRate)
                 .keyboardType(.decimalPad)
                 .textFieldStyle(.plain)
+                .focused($isFocused)
                 .foregroundStyle(DesignPalette.ink)
                 .padding(16)
                 .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
@@ -42,6 +44,14 @@ struct ExchangeRateInputView: View {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundStyle(DesignPalette.mutedInk)
                                 .padding(.trailing, 14)
+                        }
+                    }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") {
+                            isFocused = false
                         }
                     }
                 }

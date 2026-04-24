@@ -36,6 +36,14 @@ struct AmountInputView: View {
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                     .multilineTextAlignment(.trailing)
                     .foregroundStyle(DesignPalette.ink)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") {
+                                isFocused = false
+                            }
+                        }
+                    }
             }
             .padding(16)
             .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 22, style: .continuous))

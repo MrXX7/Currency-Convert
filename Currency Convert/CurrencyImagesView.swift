@@ -47,12 +47,15 @@ struct CurrencyImagesView: View {
                                     currencyCard(for: currency)
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityLabel("\(currency.name), \(currency.code)")
+                                .accessibilityHint("Opens banknotes and details")
                             }
                         }
                     }
                 }
                 .padding(16)
             }
+            .refreshable {}
             .background(DesignPalette.surface)
             .navigationTitle("Currency Library")
             .searchable(text: $searchText, prompt: "Search currency or region")

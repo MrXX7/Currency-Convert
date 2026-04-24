@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 @MainActor
 final class CurrencyConverterViewModel: ObservableObject {
@@ -156,6 +157,9 @@ struct CurrencyConvertView: View {
                     .padding(.bottom, 124)
                 }
                 .scrollDismissesKeyboard(.interactively)
+                .refreshable {
+                    await viewModel.fetchRates()
+                }
             }
             .navigationBarHidden(true)
         }
@@ -228,6 +232,8 @@ struct CurrencyConvertView: View {
                             .background(Color.white.opacity(0.84), in: Circle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Open settings")
+                    .accessibilityHint("Adjust defaults and appearance")
 
                     DarkModeToggleButton(isDarkMode: $isDarkMode)
                 }
@@ -290,6 +296,7 @@ struct CurrencyConvertView: View {
                 Label("Swap Base and Target", systemImage: "arrow.up.arrow.down.circle.fill")
             }
             .buttonStyle(SecondaryCapsuleButtonStyle())
+            .accessibilityHint("Switches the base and target currencies")
 
             CurrencyPickerView(
                 title: "Convert to",
@@ -456,6 +463,19 @@ struct CurrencyConvertView: View {
                         .foregroundStyle(DesignPalette.mutedInk)
                 }
             }
+
+            Button {
+                UIPasteboard.general.string = viewModel.formattedConvertedAmount
+            } label: {
+                Image(systemName: "doc.on.doc")
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(DesignPalette.ink)
+                    .padding(10)
+                    .background(DesignPalette.accentSoft.opacity(0.9), in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Copy conversion result")
+            .accessibilityHint("Copies the current converted amount")
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 14)
@@ -468,6 +488,7 @@ struct CurrencyConvertView: View {
                 )
         )
         .shadow(color: DesignPalette.shadow, radius: 16, x: 0, y: 8)
+        .accessibilityElement(children: .combine)
     }
 
     private var compactResultSubtitle: String {
