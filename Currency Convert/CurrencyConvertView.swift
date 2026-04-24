@@ -163,7 +163,7 @@ struct CurrencyConvertView: View {
 
                     Text("Clean, fast conversion with live exchange data and a clearer layout.")
                         .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.74))
+                        .foregroundStyle(DesignPalette.ink.opacity(0.78))
                 }
 
                 Spacer(minLength: 12)
@@ -191,10 +191,10 @@ struct CurrencyConvertView: View {
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(DesignPalette.ink.opacity(0.36))
+                .fill(Color.white.opacity(0.58))
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(DesignPalette.accentSoft.opacity(0.35), lineWidth: 1)
+                        .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
                 )
         )
     }
@@ -317,17 +317,17 @@ struct CurrencyConvertView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title.uppercased())
                 .font(.caption2.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.58))
+                .foregroundStyle(DesignPalette.mutedInk)
 
             Text(value)
                 .font(.headline.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(DesignPalette.ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(DesignPalette.accentStrong.opacity(0.24), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(DesignPalette.accentSoft.opacity(0.85), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func lastUpdatedText(from date: Date) -> String {
@@ -349,7 +349,7 @@ private struct CardModifier: ViewModifier {
                             .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
                     )
             )
-            .shadow(color: DesignPalette.ink.opacity(0.14), radius: 20, x: 0, y: 12)
+            .shadow(color: DesignPalette.accentStrong.opacity(0.10), radius: 18, x: 0, y: 10)
     }
 }
 

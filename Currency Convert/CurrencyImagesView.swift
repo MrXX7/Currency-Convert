@@ -57,7 +57,7 @@ struct CurrencyImagesView: View {
 
             Text("A cleaner gallery for exploring supported currencies and their visual references.")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DesignPalette.ink.opacity(0.72))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
