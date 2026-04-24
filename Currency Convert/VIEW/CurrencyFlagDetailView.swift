@@ -28,11 +28,7 @@ struct CurrencyFlagDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(24)
                 .background(
-                    LinearGradient(
-                        colors: [Color.accentColor.opacity(0.95), Color.indigo.opacity(0.75)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
+                    DesignPalette.libraryGradient,
                     in: RoundedRectangle(cornerRadius: 30, style: .continuous)
                 )
                 .foregroundStyle(.white)
@@ -48,7 +44,7 @@ struct CurrencyFlagDetailView: View {
                                     .scaledToFit()
                                     .frame(maxWidth: .infinity, maxHeight: 290)
                                     .padding(18)
-                                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                                    .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
                                     .padding(.horizontal, 2)
                             }
                         }
@@ -67,15 +63,15 @@ struct CurrencyFlagDetailView: View {
 
                     Text(currency.description)
                         .font(.body)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DesignPalette.mutedInk)
                         .padding(.top, 6)
                 }
                 .padding(20)
-                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(DesignPalette.surface)
         .navigationTitle(currency.code)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -87,7 +83,7 @@ struct CurrencyFlagDetailView: View {
             Spacer()
             Text(value)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DesignPalette.mutedInk)
         }
     }
 }

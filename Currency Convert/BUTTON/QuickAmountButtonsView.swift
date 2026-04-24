@@ -13,17 +13,17 @@ struct PrimaryCapsuleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline.weight(.semibold))
-            .foregroundStyle(isProminent ? Color.white : Color.primary)
+            .foregroundStyle(isProminent ? Color.white : DesignPalette.ink)
             .padding(.vertical, 11)
             .padding(.horizontal, 14)
             .frame(maxWidth: .infinity)
             .background(
                 Capsule()
-                    .fill(isProminent ? Color.accentColor : Color.white.opacity(0.7))
+                    .fill(isProminent ? DesignPalette.accentStrong : DesignPalette.elevatedSurface)
             )
             .overlay(
                 Capsule()
-                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                    .stroke(isProminent ? DesignPalette.accentStrong : DesignPalette.stroke.opacity(0.9), lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.easeOut(duration: 0.18), value: configuration.isPressed)
@@ -34,14 +34,14 @@ struct SecondaryCapsuleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline.weight(.semibold))
-            .foregroundStyle(Color.primary)
+            .foregroundStyle(DesignPalette.ink)
             .padding(.vertical, 11)
             .padding(.horizontal, 14)
             .frame(maxWidth: .infinity)
-            .background(Color.black.opacity(0.04), in: Capsule())
+            .background(DesignPalette.elevatedSurface, in: Capsule())
             .overlay(
                 Capsule()
-                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.easeOut(duration: 0.18), value: configuration.isPressed)

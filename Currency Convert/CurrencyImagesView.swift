@@ -44,7 +44,7 @@ struct CurrencyImagesView: View {
                 }
                 .padding(16)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(DesignPalette.surface)
             .navigationTitle("Currency Library")
             .searchable(text: $searchText, prompt: "Search currency or region")
         }
@@ -62,11 +62,7 @@ struct CurrencyImagesView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(
-            LinearGradient(
-                colors: [Color.accentColor.opacity(0.95), Color.cyan.opacity(0.75)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
+            DesignPalette.libraryGradient,
             in: RoundedRectangle(cornerRadius: 28, style: .continuous)
         )
         .foregroundStyle(.white)
@@ -95,14 +91,18 @@ struct CurrencyImagesView: View {
 
             Text(currency.region)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(DesignPalette.accentStrong)
         }
         .frame(maxWidth: .infinity, minHeight: 150, alignment: .leading)
         .padding(16)
         .background(
             background
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 8)
+                .fill(DesignPalette.elevatedSurface)
+                .shadow(color: DesignPalette.ink.opacity(0.10), radius: 12, x: 0, y: 8)
+        )
+        .overlay(
+            background
+                .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
         )
     }
 }

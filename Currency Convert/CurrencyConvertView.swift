@@ -114,15 +114,7 @@ struct CurrencyConvertView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.08, green: 0.17, blue: 0.34),
-                        Color(red: 0.10, green: 0.34, blue: 0.51),
-                        Color(red: 0.88, green: 0.95, blue: 0.98)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+                DesignPalette.heroGradient
                 .ignoresSafeArea()
 
                 ScrollView {
@@ -171,7 +163,7 @@ struct CurrencyConvertView: View {
 
                     Text("Clean, fast conversion with live exchange data and a clearer layout.")
                         .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.82))
+                        .foregroundStyle(.white.opacity(0.74))
                 }
 
                 Spacer(minLength: 12)
@@ -199,10 +191,10 @@ struct CurrencyConvertView: View {
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(.white.opacity(0.18))
+                .fill(DesignPalette.ink.opacity(0.36))
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(.white.opacity(0.22), lineWidth: 1)
+                        .stroke(DesignPalette.accentSoft.opacity(0.35), lineWidth: 1)
                 )
         )
     }
@@ -277,18 +269,19 @@ struct CurrencyConvertView: View {
             if let errorMessage = viewModel.errorMessage {
                 Label(errorMessage, systemImage: "wifi.exclamationmark")
                     .font(.subheadline)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color.red.opacity(0.85))
             } else if viewModel.isLoading {
                 HStack(spacing: 10) {
                     ProgressView()
+                        .tint(DesignPalette.accentStrong)
                     Text("Updating rates...")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DesignPalette.mutedInk)
                 }
             } else if let lastUpdated = viewModel.lastUpdated {
                 Label(lastUpdatedText(from: lastUpdated), systemImage: "clock")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignPalette.mutedInk)
             }
         }
         .cardStyle()
@@ -324,7 +317,7 @@ struct CurrencyConvertView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title.uppercased())
                 .font(.caption2.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.68))
+                .foregroundStyle(.white.opacity(0.58))
 
             Text(value)
                 .font(.headline.weight(.semibold))
@@ -334,7 +327,7 @@ struct CurrencyConvertView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(.black.opacity(0.16), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(DesignPalette.accentStrong.opacity(0.24), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func lastUpdatedText(from date: Date) -> String {
@@ -350,13 +343,13 @@ private struct CardModifier: ViewModifier {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
-                    .fill(.ultraThinMaterial)
+                    .fill(DesignPalette.surface)
                     .overlay(
                         RoundedRectangle(cornerRadius: 28, style: .continuous)
-                            .stroke(Color.white.opacity(0.28), lineWidth: 1)
+                            .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
                     )
             )
-            .shadow(color: .black.opacity(0.12), radius: 18, x: 0, y: 10)
+            .shadow(color: DesignPalette.ink.opacity(0.14), radius: 20, x: 0, y: 12)
     }
 }
 

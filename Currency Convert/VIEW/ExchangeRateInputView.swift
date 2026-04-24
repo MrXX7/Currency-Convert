@@ -19,21 +19,25 @@ struct ExchangeRateInputView: View {
                 Spacer()
                 Text("Optional")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignPalette.mutedInk)
             }
 
             TextField("Override 1 \(targetCurrency) rate", text: $customExchangeRate)
                 .keyboardType(.decimalPad)
                 .textFieldStyle(.plain)
                 .padding(16)
-                .background(Color.white.opacity(0.7), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
+                )
                 .overlay(alignment: .trailing) {
                     if !customExchangeRate.isEmpty {
                         Button {
                             customExchangeRate = ""
                         } label: {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DesignPalette.mutedInk)
                                 .padding(.trailing, 14)
                         }
                     }

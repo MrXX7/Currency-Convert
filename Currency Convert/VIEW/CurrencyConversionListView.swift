@@ -20,11 +20,11 @@ struct CurrencyConversionListView: View {
             if let amountValue {
                 Text("\(AmountConverter.formattedAmount(amountValue, currencyCode: baseCurrency.code)) across every supported destination.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignPalette.mutedInk)
             } else {
                 Text("Enter an amount to populate all destination currencies.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignPalette.mutedInk)
             }
 
             ForEach(conversions) { conversion in
@@ -34,7 +34,7 @@ struct CurrencyConversionListView: View {
                             .font(.headline)
                         Text(conversion.currency.name)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DesignPalette.mutedInk)
                     }
 
                     Spacer()
@@ -43,7 +43,11 @@ struct CurrencyConversionListView: View {
                         .font(.headline.weight(.semibold))
                 }
                 .padding(14)
-                .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
+                )
             }
         }
     }

@@ -54,11 +54,11 @@ private struct CurrencyChipButtonStyle: ButtonStyle {
             .foregroundStyle(isSelected ? Color.white : Color.primary)
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(isSelected ? Color.accentColor : Color.white.opacity(0.72))
+                    .fill(isSelected ? DesignPalette.accentStrong : DesignPalette.elevatedSurface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(isSelected ? Color.accentColor : Color.black.opacity(0.06), lineWidth: 1)
+                    .stroke(isSelected ? DesignPalette.accentStrong : DesignPalette.stroke.opacity(0.9), lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.easeOut(duration: 0.18), value: configuration.isPressed)

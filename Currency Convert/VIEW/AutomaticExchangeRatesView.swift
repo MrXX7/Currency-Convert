@@ -20,7 +20,7 @@ struct AutomaticExchangeRatesView: View {
 
             Text("Live indicative rates from the selected base currency.")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DesignPalette.mutedInk)
 
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(automaticExchangeRates) { rate in
@@ -36,11 +36,15 @@ struct AutomaticExchangeRatesView: View {
 
                         Text(rate.currency.name)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DesignPalette.mutedInk)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(14)
-                    .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
+                    )
                 }
             }
         }

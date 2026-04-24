@@ -18,11 +18,11 @@ struct TotalAmountView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Result")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DesignPalette.mutedInk)
 
             Text(formattedAmount)
                 .font(.system(size: 34, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary)
+                .foregroundStyle(DesignPalette.ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
 
@@ -35,11 +35,11 @@ struct TotalAmountView: View {
             if let amountValue {
                 Text("\(AmountConverter.formattedAmount(amountValue, currencyCode: baseCurrency.code)) converts instantly using the active rate.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignPalette.mutedInk)
             } else {
                 Text("Enter an amount to see the live conversion.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignPalette.mutedInk)
             }
         }
     }
@@ -56,12 +56,13 @@ struct TotalAmountView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title.uppercased())
                 .font(.caption2.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DesignPalette.mutedInk)
             Text(value)
                 .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DesignPalette.ink)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color.black.opacity(0.04), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }

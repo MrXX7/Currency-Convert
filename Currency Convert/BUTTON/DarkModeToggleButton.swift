@@ -21,10 +21,10 @@ struct DarkModeToggleButton: View {
                 .foregroundStyle(.white)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 14)
-                .background(.white.opacity(0.16), in: Capsule())
+                .background(DesignPalette.ink.opacity(0.34), in: Capsule())
                 .overlay(
                     Capsule()
-                        .stroke(.white.opacity(0.22), lineWidth: 1)
+                        .stroke(DesignPalette.accentSoft.opacity(0.35), lineWidth: 1)
                 )
         }
         .buttonStyle(.plain)
