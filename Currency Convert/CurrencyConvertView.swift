@@ -92,12 +92,30 @@ final class CurrencyConverterViewModel: ObservableObject {
         }
     }
 
-    func reset() {
+    func applyPreferences(baseCurrencyCode: String, targetCurrencyCode: String, showsAllConversions: Bool, clearInputs: Bool) {
+        self.baseCurrencyCode = baseCurrencyCode
+        self.targetCurrencyCode = targetCurrencyCode == baseCurrencyCode ? firstAvailableTarget(for: baseCurrencyCode) : targetCurrencyCode
+        self.showAllConversions = showsAllConversions
+
+        if clearInputs {
+            amountInput = ""
+            customExchangeRate = ""
+        }
+    }
+
+    func swapCurrencies() {
+        let previousBase = baseCurrencyCode
+        baseCurrencyCode = targetCurrencyCode
+        targetCurrencyCode = previousBase
+        customExchangeRate = ""
+    }
+
+    func reset(baseCurrencyCode: String, targetCurrencyCode: String, showsAllConversions: Bool) {
         amountInput = ""
         customExchangeRate = ""
-        baseCurrencyCode = CurrencyCatalog.supported[0].code
-        targetCurrencyCode = CurrencyCatalog.supported[1].code
-        showAllConversions = false
+        self.baseCurrencyCode = baseCurrencyCode
+        self.targetCurrencyCode = targetCurrencyCode == baseCurrencyCode ? firstAvailableTarget(for: baseCurrencyCode) : targetCurrencyCode
+        self.showAllConversions = showsAllConversions
         errorMessage = nil
     }
 
@@ -110,6 +128,11 @@ struct CurrencyConvertView: View {
     @Binding var isDarkMode: Bool
     @StateObject private var viewModel = CurrencyConverterViewModel()
     @FocusState private var isKeyboardFocused: Bool
+    @State private var showSettings = false
+    @State private var hasLoadedStoredDefaults = false
+    @AppStorage("defaultBaseCurrency") private var defaultBaseCurrency = CurrencyCatalog.supported[0].code
+    @AppStorage("defaultTargetCurrency") private var defaultTargetCurrency = CurrencyCatalog.supported[1].code
+    @AppStorage("showAllConversionsByDefault") private var showAllConversionsByDefault = false
 
     var body: some View {
         NavigationStack {
@@ -133,6 +156,7 @@ struct CurrencyConvertView: View {
             .navigationBarHidden(true)
         }
         .task {
+            applyStoredDefaultsIfNeeded()
             await viewModel.fetchRates()
         }
         .task(id: viewModel.baseCurrencyCode) {
@@ -151,6 +175,22 @@ struct CurrencyConvertView: View {
                 viewModel.customExchangeRate = sanitized
             }
         }
+        .sheet(isPresented: $showSettings) {
+            ConverterSettingsView(
+                isDarkMode: $isDarkMode,
+                defaultBaseCurrency: $defaultBaseCurrency,
+                defaultTargetCurrency: $defaultTargetCurrency,
+                showAllConversionsByDefault: $showAllConversionsByDefault,
+                onApplyNow: {
+                    applyStoredDefaults(clearInputs: false)
+                    Task {
+                        await viewModel.fetchRates()
+                    }
+                }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     private var headerSection: some View {
@@ -168,7 +208,20 @@ struct CurrencyConvertView: View {
 
                 Spacer(minLength: 12)
 
-                DarkModeToggleButton(isDarkMode: $isDarkMode)
+                HStack(spacing: 10) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(DesignPalette.ink)
+                            .padding(12)
+                            .background(Color.white.opacity(0.84), in: Circle())
+                    }
+                    .buttonStyle(.plain)
+
+                    DarkModeToggleButton(isDarkMode: $isDarkMode)
+                }
             }
 
             HStack(spacing: 12) {
@@ -221,6 +274,14 @@ struct CurrencyConvertView: View {
                 isFocused: $isKeyboardFocused
             )
 
+            Button {
+                isKeyboardFocused = false
+                viewModel.swapCurrencies()
+            } label: {
+                Label("Swap Base and Target", systemImage: "arrow.up.arrow.down.circle.fill")
+            }
+            .buttonStyle(SecondaryCapsuleButtonStyle())
+
             CurrencyPickerView(
                 title: "Convert to",
                 subtitle: "Choose the output currency for the main result card.",
@@ -241,7 +302,11 @@ struct CurrencyConvertView: View {
 
                 ResetButton {
                     isKeyboardFocused = false
-                    viewModel.reset()
+                    viewModel.reset(
+                        baseCurrencyCode: defaultBaseCurrency,
+                        targetCurrencyCode: defaultTargetCurrency,
+                        showsAllConversions: showAllConversionsByDefault
+                    )
                 }
 
                 Button {
@@ -341,6 +406,24 @@ struct CurrencyConvertView: View {
         formatter.unitsStyle = .short
         return "Rates updated \(formatter.localizedString(for: date, relativeTo: .now))"
     }
+
+    private func applyStoredDefaultsIfNeeded() {
+        guard !hasLoadedStoredDefaults else {
+            return
+        }
+
+        hasLoadedStoredDefaults = true
+        applyStoredDefaults(clearInputs: false)
+    }
+
+    private func applyStoredDefaults(clearInputs: Bool) {
+        viewModel.applyPreferences(
+            baseCurrencyCode: defaultBaseCurrency,
+            targetCurrencyCode: defaultTargetCurrency,
+            showsAllConversions: showAllConversionsByDefault,
+            clearInputs: clearInputs
+        )
+    }
 }
 
 private struct CardModifier: ViewModifier {
@@ -367,4 +450,71 @@ private extension View {
 
 #Preview {
     CurrencyConvertView(isDarkMode: .constant(false))
+}
+
+private struct ConverterSettingsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var isDarkMode: Bool
+    @Binding var defaultBaseCurrency: String
+    @Binding var defaultTargetCurrency: String
+    @Binding var showAllConversionsByDefault: Bool
+    let onApplyNow: () -> Void
+
+    private var availableTargetCurrencies: [CurrencyDefinition] {
+        CurrencyCatalog.supported.filter { $0.code != defaultBaseCurrency }
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Appearance") {
+                    Toggle("Dark Mode", isOn: $isDarkMode)
+                }
+
+                Section("Default Pair") {
+                    Picker("Base Currency", selection: $defaultBaseCurrency) {
+                        ForEach(CurrencyCatalog.supported) { currency in
+                            Text("\(currency.flag) \(currency.code) · \(currency.name)")
+                                .tag(currency.code)
+                        }
+                    }
+
+                    Picker("Target Currency", selection: $defaultTargetCurrency) {
+                        ForEach(availableTargetCurrencies) { currency in
+                            Text("\(currency.flag) \(currency.code) · \(currency.name)")
+                                .tag(currency.code)
+                        }
+                    }
+                }
+
+                Section("Behavior") {
+                    Toggle("Open with all conversions", isOn: $showAllConversionsByDefault)
+                }
+
+                Section {
+                    Button("Apply Defaults to Current Screen") {
+                        onApplyNow()
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                } footer: {
+                    Text("These preferences also apply to future resets and new launches.")
+                }
+            }
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+            .onChange(of: defaultBaseCurrency) { _, newValue in
+                if defaultTargetCurrency == newValue {
+                    defaultTargetCurrency = CurrencyCatalog.supported.first(where: { $0.code != newValue })?.code ?? newValue
+                }
+            }
+        }
+    }
 }
