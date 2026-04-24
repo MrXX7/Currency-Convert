@@ -13,6 +13,8 @@ struct TotalAmountView: View {
     let targetCurrency: CurrencyDefinition
     let amountValue: Double?
     let appliedRate: Double?
+    let rateSource: ExchangeRateSource
+    let isManualRate: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -32,6 +34,17 @@ struct TotalAmountView: View {
                 summaryPill(title: "Rate", value: appliedRateText)
             }
 
+            HStack(spacing: 8) {
+                Image(systemName: isManualRate ? "slider.horizontal.3" : (rateSource == .cache ? "internaldrive.fill" : "dot.radiowaves.left.and.right"))
+                    .font(.caption.weight(.bold))
+                Text(sourceText)
+                    .font(.caption.weight(.semibold))
+            }
+            .foregroundStyle(DesignPalette.mutedInk)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(DesignPalette.accentSoft.opacity(0.8), in: Capsule())
+
             if let amountValue {
                 Text("\(AmountConverter.formattedAmount(amountValue, currencyCode: baseCurrency.code)) converts instantly using the active rate.")
                     .font(.subheadline)
@@ -50,6 +63,14 @@ struct TotalAmountView: View {
         }
 
         return String(format: "%.4f", appliedRate)
+    }
+
+    private var sourceText: String {
+        if isManualRate {
+            return "Manual rate override is active"
+        }
+
+        return rateSource == .cache ? "Using cached rates" : "Using live rates"
     }
 
     private func summaryPill(title: String, value: String) -> some View {

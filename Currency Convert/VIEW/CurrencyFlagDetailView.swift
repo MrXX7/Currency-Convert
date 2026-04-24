@@ -56,6 +56,7 @@ struct CurrencyFlagDetailView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Overview")
                         .font(.headline)
+                        .foregroundStyle(DesignPalette.ink)
 
                     detailRow(title: "Code", value: currency.code)
                     detailRow(title: "Region", value: currency.region)

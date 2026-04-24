@@ -18,6 +18,7 @@ final class CurrencyConverterViewModel: ObservableObject {
     @Published var showAllConversions = false
     @Published var errorMessage: String?
     @Published var lastUpdated: Date?
+    @Published var rateSource: ExchangeRateSource = .live
 
     let quickAmounts = ["5", "10", "25", "50", "100", "250", "500", "1000"]
 
@@ -75,12 +76,15 @@ final class CurrencyConverterViewModel: ObservableObject {
             let snapshot = try await ExchangeRateFetcher.fetchRates(baseCurrencyCode: baseCurrencyCode)
             exchangeRates = snapshot.rates
             lastUpdated = snapshot.updateTimestamp
+            rateSource = snapshot.source
+            errorMessage = snapshot.source == .cache ? "Showing cached exchange rates." : nil
 
             if targetCurrencyCode == baseCurrencyCode {
                 targetCurrencyCode = firstAvailableTarget(for: baseCurrencyCode)
             }
         } catch {
             errorMessage = error.localizedDescription
+            rateSource = .live
         }
 
         isLoading = false
@@ -335,13 +339,15 @@ struct CurrencyConvertView: View {
                 baseCurrency: viewModel.baseCurrency,
                 targetCurrency: viewModel.targetCurrency,
                 amountValue: viewModel.amountValue,
-                appliedRate: viewModel.activeRate
+                appliedRate: viewModel.activeRate,
+                rateSource: viewModel.rateSource,
+                isManualRate: !viewModel.customExchangeRate.isEmpty
             )
 
             if let errorMessage = viewModel.errorMessage {
                 Label(errorMessage, systemImage: "wifi.exclamationmark")
                     .font(.subheadline)
-                    .foregroundStyle(Color.red.opacity(0.85))
+                    .foregroundStyle(viewModel.rateSource == .cache ? DesignPalette.accentStrong : Color.red.opacity(0.85))
             } else if viewModel.isLoading {
                 HStack(spacing: 10) {
                     ProgressView()
@@ -425,7 +431,7 @@ struct CurrencyConvertView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
 
-                Text("\(viewModel.baseCurrency.code) -> \(viewModel.targetCurrency.code)")
+                Text(compactResultSubtitle)
                     .font(.caption)
                     .foregroundStyle(DesignPalette.mutedInk)
             }
@@ -444,6 +450,10 @@ struct CurrencyConvertView: View {
                     Text(rateBadgeText)
                         .font(.subheadline.weight(.bold))
                         .foregroundStyle(DesignPalette.ink)
+
+                    Text(compactSourceLabel)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DesignPalette.mutedInk)
                 }
             }
         }
@@ -458,6 +468,23 @@ struct CurrencyConvertView: View {
                 )
         )
         .shadow(color: DesignPalette.shadow, radius: 16, x: 0, y: 8)
+    }
+
+    private var compactResultSubtitle: String {
+        let pair = "\(viewModel.baseCurrency.code) -> \(viewModel.targetCurrency.code)"
+        if !viewModel.customExchangeRate.isEmpty {
+            return "\(pair) · Manual rate"
+        }
+
+        return viewModel.rateSource == .cache ? "\(pair) · Cached" : "\(pair) · Live"
+    }
+
+    private var compactSourceLabel: String {
+        if !viewModel.customExchangeRate.isEmpty {
+            return "Manual"
+        }
+
+        return viewModel.rateSource == .cache ? "Cached" : "Live"
     }
 
     private func applyStoredDefaultsIfNeeded() {

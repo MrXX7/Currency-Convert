@@ -28,17 +28,26 @@ struct CurrencyImagesView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     heroCard
 
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 14)], spacing: 14) {
-                        ForEach(filteredCurrencies) { currency in
-                            NavigationLink {
-                                CurrencyFlagDetailView(
-                                    currency: currency,
-                                    flagImageNames: imageNames(for: currency.code)
-                                )
-                            } label: {
-                                currencyCard(for: currency)
+                    if filteredCurrencies.isEmpty {
+                        ContentUnavailableView(
+                            "No Matches",
+                            systemImage: "magnifyingglass",
+                            description: Text("Try searching by code, currency name, or region.")
+                        )
+                        .frame(maxWidth: .infinity, minHeight: 240)
+                    } else {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 14)], spacing: 14) {
+                            ForEach(filteredCurrencies) { currency in
+                                NavigationLink {
+                                    CurrencyFlagDetailView(
+                                        currency: currency,
+                                        flagImageNames: imageNames(for: currency.code)
+                                    )
+                                } label: {
+                                    currencyCard(for: currency)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                 }
