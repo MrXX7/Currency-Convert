@@ -149,7 +149,7 @@ struct CurrencyConvertView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
-                    .padding(.bottom, 28)
+                    .padding(.bottom, 124)
                 }
                 .scrollDismissesKeyboard(.interactively)
             }
@@ -190,6 +190,11 @@ struct CurrencyConvertView: View {
             )
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
+        }
+        .safeAreaInset(edge: .bottom) {
+            compactResultBar
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
         }
     }
 
@@ -405,6 +410,54 @@ struct CurrencyConvertView: View {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .short
         return "Rates updated \(formatter.localizedString(for: date, relativeTo: .now))"
+    }
+
+    private var compactResultBar: some View {
+        HStack(alignment: .center, spacing: 14) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(viewModel.amountValue == nil ? "Live Result" : "Current Conversion")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DesignPalette.mutedInk)
+
+                Text(viewModel.formattedConvertedAmount)
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(DesignPalette.accentStrong)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+
+                Text("\(viewModel.baseCurrency.code) -> \(viewModel.targetCurrency.code)")
+                    .font(.caption)
+                    .foregroundStyle(DesignPalette.mutedInk)
+            }
+
+            Spacer(minLength: 12)
+
+            if viewModel.isLoading {
+                ProgressView()
+                    .tint(DesignPalette.accentStrong)
+            } else {
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("Rate")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DesignPalette.mutedInk)
+
+                    Text(rateBadgeText)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(DesignPalette.ink)
+                }
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 14)
+        .background(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(Color.white.opacity(0.94))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
+                )
+        )
+        .shadow(color: DesignPalette.shadow, radius: 16, x: 0, y: 8)
     }
 
     private func applyStoredDefaultsIfNeeded() {
