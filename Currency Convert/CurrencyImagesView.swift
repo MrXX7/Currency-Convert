@@ -71,6 +71,12 @@ struct CurrencyImagesView: View {
             Text("A cleaner gallery for exploring supported currencies and their visual references.")
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.88))
+
+            HStack(spacing: 10) {
+                heroChip("\(CurrencyCatalog.supported.count) currencies")
+                heroChip("Search by code")
+                heroChip("Tap for details")
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
@@ -88,6 +94,7 @@ struct CurrencyImagesView: View {
 
     private func currencyCard(for currency: CurrencyDefinition) -> some View {
         let background = RoundedRectangle(cornerRadius: 24, style: .continuous)
+        let assetCount = imageNames(for: currency.code).count
 
         return VStack(alignment: .leading, spacing: 12) {
             Text(currency.flag)
@@ -105,6 +112,13 @@ struct CurrencyImagesView: View {
             Text(currency.region)
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(DesignPalette.accentStrong)
+
+            Text(assetCount == 0 ? "No gallery yet" : "\(assetCount) images")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(DesignPalette.mutedInk)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .background(DesignPalette.accentSoft.opacity(0.8), in: Capsule())
         }
         .frame(maxWidth: .infinity, minHeight: 150, alignment: .leading)
         .padding(16)
@@ -117,6 +131,15 @@ struct CurrencyImagesView: View {
             background
                 .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
         )
+    }
+
+    private func heroChip(_ text: String) -> some View {
+        Text(text)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.white.opacity(0.18), in: Capsule())
     }
 }
 

@@ -10,6 +10,7 @@ import SwiftUI
 struct CurrencyFlagDetailView: View {
     let currency: CurrencyDefinition
     let flagImageNames: [String]
+    @State private var selectedImageIndex = 0
 
     var body: some View {
         ScrollView {
@@ -24,6 +25,11 @@ struct CurrencyFlagDetailView: View {
                     Text(currency.name)
                         .font(.title3.weight(.semibold))
                         .foregroundStyle(.secondary)
+
+                    HStack(spacing: 10) {
+                        factChip("\(flagImageNames.count) gallery items")
+                        factChip(currency.region)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(24)
@@ -36,8 +42,8 @@ struct CurrencyFlagDetailView: View {
                 if flagImageNames.isEmpty {
                     ContentUnavailableView("No Images Yet", systemImage: "photo.on.rectangle", description: Text("Add more assets to enrich this currency page."))
                 } else {
-                    TabView {
-                        ForEach(flagImageNames, id: \.self) { imageName in
+                    TabView(selection: $selectedImageIndex) {
+                        ForEach(Array(flagImageNames.enumerated()), id: \.offset) { index, imageName in
                             if let uiImage = UIImage(named: imageName) {
                                 Image(uiImage: uiImage)
                                     .resizable()
@@ -46,11 +52,16 @@ struct CurrencyFlagDetailView: View {
                                     .padding(18)
                                     .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
                                     .padding(.horizontal, 2)
+                                    .tag(index)
                             }
                         }
                     }
                     .frame(height: 330)
                     .tabViewStyle(.page(indexDisplayMode: .automatic))
+
+                    Text("Image \(selectedImageIndex + 1) of \(flagImageNames.count)")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(DesignPalette.mutedInk)
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
@@ -86,5 +97,14 @@ struct CurrencyFlagDetailView: View {
                 .font(.subheadline)
                 .foregroundStyle(DesignPalette.mutedInk)
         }
+    }
+
+    private func factChip(_ text: String) -> some View {
+        Text(text)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.white.opacity(0.16), in: Capsule())
     }
 }
