@@ -156,6 +156,8 @@ struct CurrencyConvertView: View {
     @AppStorage("defaultBaseCurrency") private var defaultBaseCurrency = CurrencyCatalog.supported[0].code
     @AppStorage("defaultTargetCurrency") private var defaultTargetCurrency = CurrencyCatalog.supported[1].code
     @AppStorage("showAllConversionsByDefault") private var showAllConversionsByDefault = false
+    @AppStorage("defaultWorkspace") private var defaultWorkspaceRawValue = ConverterWorkspace.convert.rawValue
+    @AppStorage("showAdvancedControlsByDefault") private var showAdvancedControlsByDefault = false
 
     var body: some View {
         NavigationStack {
@@ -212,6 +214,8 @@ struct CurrencyConvertView: View {
                 defaultBaseCurrency: $defaultBaseCurrency,
                 defaultTargetCurrency: $defaultTargetCurrency,
                 showAllConversionsByDefault: $showAllConversionsByDefault,
+                defaultWorkspaceRawValue: $defaultWorkspaceRawValue,
+                showAdvancedControlsByDefault: $showAdvancedControlsByDefault,
                 onApplyNow: {
                     applyStoredDefaults(clearInputs: false)
                     Task {
@@ -588,6 +592,11 @@ struct CurrencyConvertView: View {
     }
 
     private func applyStoredDefaults(clearInputs: Bool) {
+        if let workspace = ConverterWorkspace(rawValue: defaultWorkspaceRawValue) {
+            selectedWorkspace = workspace
+        }
+        showAdvancedControls = showAdvancedControlsByDefault
+
         viewModel.applyPreferences(
             baseCurrencyCode: defaultBaseCurrency,
             targetCurrencyCode: defaultTargetCurrency,
@@ -629,6 +638,8 @@ private struct ConverterSettingsView: View {
     @Binding var defaultBaseCurrency: String
     @Binding var defaultTargetCurrency: String
     @Binding var showAllConversionsByDefault: Bool
+    @Binding var defaultWorkspaceRawValue: String
+    @Binding var showAdvancedControlsByDefault: Bool
     let onApplyNow: () -> Void
 
     private var availableTargetCurrencies: [CurrencyDefinition] {
@@ -659,7 +670,15 @@ private struct ConverterSettingsView: View {
                 }
 
                 Section("Behavior") {
+                    Picker("Start Screen", selection: $defaultWorkspaceRawValue) {
+                        ForEach(ConverterWorkspace.allCases) { workspace in
+                            Text(workspace.title)
+                                .tag(workspace.rawValue)
+                        }
+                    }
+
                     Toggle("Open with all conversions", isOn: $showAllConversionsByDefault)
+                    Toggle("Open advanced controls", isOn: $showAdvancedControlsByDefault)
                 }
 
                 Section {
