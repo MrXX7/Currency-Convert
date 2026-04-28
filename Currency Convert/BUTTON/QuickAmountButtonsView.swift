@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct PrimaryCapsuleButtonStyle: ButtonStyle {
     var isProminent: Bool = false
@@ -64,6 +65,7 @@ struct QuickAmountPickerView: View {
                 ForEach(quickAmounts, id: \.self) { amount in
                     Button(amount) {
                         amountInput = amount
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     }
                     .buttonStyle(PrimaryCapsuleButtonStyle(isProminent: amountInput == amount))
                 }

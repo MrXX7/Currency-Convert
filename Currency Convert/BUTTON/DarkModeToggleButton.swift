@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct DarkModeToggleButton: View {
     @Binding var isDarkMode: Bool
@@ -15,6 +16,7 @@ struct DarkModeToggleButton: View {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                 isDarkMode.toggle()
             }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
             Label(isDarkMode ? "Dark" : "Light", systemImage: isDarkMode ? "moon.stars.fill" : "sun.max.fill")
                 .font(.subheadline.weight(.semibold))

@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ResetButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            action()
+        } label: {
             Label("Reset", systemImage: "arrow.counterclockwise")
         }
         .buttonStyle(SecondaryCapsuleButtonStyle())

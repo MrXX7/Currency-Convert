@@ -40,6 +40,13 @@ struct AutomaticExchangeRatesView: View {
                         Text(rate.currency.name)
                             .font(.caption)
                             .foregroundStyle(DesignPalette.mutedInk)
+
+                        Text(insightText(for: rate.rate))
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(DesignPalette.accentStrong)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(DesignPalette.accentSoft.opacity(0.8), in: Capsule())
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(14)
@@ -51,6 +58,17 @@ struct AutomaticExchangeRatesView: View {
                     .shadow(color: DesignPalette.shadow, radius: 8, x: 0, y: 4)
                 }
             }
+        }
+    }
+
+    private func insightText(for rate: Double) -> String {
+        switch rate {
+        case 0..<0.9:
+            return "Below parity"
+        case 0.9...1.1:
+            return "Near parity"
+        default:
+            return "Above parity"
         }
     }
 }

@@ -322,6 +322,7 @@ struct CurrencyConvertView: View {
             Button {
                 isKeyboardFocused = false
                 viewModel.swapCurrencies()
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             } label: {
                 Label("Swap Base and Target", systemImage: "arrow.up.arrow.down.circle.fill")
             }
@@ -540,6 +541,7 @@ struct CurrencyConvertView: View {
 
             Button {
                 UIPasteboard.general.string = viewModel.formattedConvertedAmount
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
             } label: {
                 Image(systemName: "doc.on.doc")
                     .font(.headline.weight(.semibold))

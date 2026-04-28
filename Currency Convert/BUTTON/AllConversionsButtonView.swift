@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct AllConversionsButtonView: View {
     @Binding var showAllConversions: Bool
@@ -16,6 +17,7 @@ struct AllConversionsButtonView: View {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                 showAllConversions.toggle()
             }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
             Label(showAllConversions ? "Hide Grid" : "Show All", systemImage: showAllConversions ? "rectangle.grid.1x2.fill" : "square.grid.2x2.fill")
         }
