@@ -169,8 +169,8 @@ struct CurrencyConvertView: View {
 
                         if selectedWorkspace == .convert {
                             converterSection
-                            summarySection
                         } else {
+                            summarySection
                             marketSection
                         }
                     }
@@ -261,22 +261,7 @@ struct CurrencyConvertView: View {
                 }
             }
 
-            HStack(spacing: 12) {
-                headerStat(
-                    title: "Base",
-                    value: "\(viewModel.baseCurrency.flag) \(viewModel.baseCurrency.code)"
-                )
-
-                headerStat(
-                    title: "Target",
-                    value: "\(viewModel.targetCurrency.flag) \(viewModel.targetCurrency.code)"
-                )
-
-                headerStat(
-                    title: "Rate",
-                    value: rateBadgeText
-                )
-            }
+            headerMetaRow
         }
         .padding(20)
         .background(
@@ -288,6 +273,18 @@ struct CurrencyConvertView: View {
                 )
         )
         .shadow(color: DesignPalette.shadow, radius: 14, x: 0, y: 8)
+    }
+
+    private var headerMetaRow: some View {
+        HStack(spacing: 8) {
+            headerChip("\(viewModel.baseCurrency.flag) \(viewModel.baseCurrency.code)")
+            Image(systemName: "arrow.right")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(DesignPalette.mutedInk)
+            headerChip("\(viewModel.targetCurrency.flag) \(viewModel.targetCurrency.code)")
+            Spacer(minLength: 8)
+            headerChip(compactSourceLabel)
+        }
     }
 
     private var converterSection: some View {
@@ -455,25 +452,18 @@ struct CurrencyConvertView: View {
         return String(format: "%.4f", activeRate)
     }
 
-    private func headerStat(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title.uppercased())
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(DesignPalette.mutedInk)
-
-            Text(value)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(DesignPalette.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(DesignPalette.accentSoft.opacity(0.85), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(DesignPalette.stroke.opacity(0.75), lineWidth: 1)
-        )
+    private func headerChip(_ text: String) -> some View {
+        Text(text)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(DesignPalette.ink)
+            .lineLimit(1)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(DesignPalette.accentSoft.opacity(0.85), in: Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(DesignPalette.stroke.opacity(0.75), lineWidth: 1)
+            )
     }
 
     private func lastUpdatedText(from date: Date) -> String {
