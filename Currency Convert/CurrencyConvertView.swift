@@ -158,6 +158,8 @@ struct CurrencyConvertView: View {
     @AppStorage("showAllConversionsByDefault") private var showAllConversionsByDefault = false
     @AppStorage("defaultWorkspace") private var defaultWorkspaceRawValue = ConverterWorkspace.convert.rawValue
     @AppStorage("showAdvancedControlsByDefault") private var showAdvancedControlsByDefault = false
+    @State private var appRating = 0
+    @State private var showRatingModal = false
 
     var body: some View {
         NavigationStack {
@@ -377,6 +379,31 @@ struct CurrencyConvertView: View {
                 }
             }
             .tint(DesignPalette.accentStrong)
+
+            // Rating Section
+            VStack(spacing: 12) {
+                Text("Enjoying the app?")
+                    .font(.subheadline)
+                    .foregroundStyle(DesignPalette.mutedInk)
+                
+                HStack(spacing: 8) {
+                    ForEach(1...5, id: \.self) { star in
+                        Image(systemName: star <= appRating ? "star.fill" : "star")
+                            .foregroundStyle(DesignPalette.accent)
+                            .onTapGesture {
+                                appRating = star
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            }
+                    }
+                }
+                
+                if appRating > 0 {
+                    Text("Thanks for rating \(appRating) stars!")
+                        .font(.caption)
+                        .foregroundStyle(DesignPalette.success)
+                }
+            }
+            .padding(.top, 12)
         }
         .cardStyle()
     }
@@ -512,6 +539,7 @@ struct CurrencyConvertView: View {
                     .foregroundStyle(DesignPalette.accentStrong)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.convertedAmount)
 
                 Text(compactResultSubtitle)
                     .font(.caption)
