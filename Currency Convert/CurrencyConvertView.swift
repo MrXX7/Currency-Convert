@@ -8,6 +8,22 @@
 import SwiftUI
 import UIKit
 
+private enum ConverterWorkspace: String, CaseIterable, Identifiable {
+    case convert
+    case market
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .convert:
+            return "Convert"
+        case .market:
+            return "Rates"
+        }
+    }
+}
+
 @MainActor
 final class CurrencyConverterViewModel: ObservableObject {
     @Published var amountInput = ""
@@ -135,6 +151,7 @@ struct CurrencyConvertView: View {
     @FocusState private var isKeyboardFocused: Bool
     @State private var showSettings = false
     @State private var hasLoadedStoredDefaults = false
+    @State private var selectedWorkspace: ConverterWorkspace = .convert
     @AppStorage("defaultBaseCurrency") private var defaultBaseCurrency = CurrencyCatalog.supported[0].code
     @AppStorage("defaultTargetCurrency") private var defaultTargetCurrency = CurrencyCatalog.supported[1].code
     @AppStorage("showAllConversionsByDefault") private var showAllConversionsByDefault = false
@@ -148,9 +165,14 @@ struct CurrencyConvertView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         headerSection
-                        converterSection
-                        summarySection
-                        ratesSection
+                        workspacePicker
+
+                        if selectedWorkspace == .convert {
+                            converterSection
+                            summarySection
+                        } else {
+                            marketSection
+                        }
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
@@ -311,11 +333,6 @@ struct CurrencyConvertView: View {
             )
 
             HStack(spacing: 10) {
-                AllConversionsButtonView(
-                    showAllConversions: $viewModel.showAllConversions,
-                    amountInput: $viewModel.amountInput
-                )
-
                 ResetButton {
                     isKeyboardFocused = false
                     viewModel.reset(
@@ -334,6 +351,52 @@ struct CurrencyConvertView: View {
                 }
                 .buttonStyle(SecondaryCapsuleButtonStyle())
                 .disabled(viewModel.isLoading)
+            }
+        }
+        .cardStyle()
+    }
+
+    private var marketSection: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Rates Explorer")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundStyle(DesignPalette.ink)
+
+                    Text("Switch between the live rate board and all destination conversions.")
+                        .font(.subheadline)
+                        .foregroundStyle(DesignPalette.mutedInk)
+                }
+
+                Spacer(minLength: 12)
+
+                AllConversionsButtonView(
+                    showAllConversions: $viewModel.showAllConversions,
+                    amountInput: $viewModel.amountInput
+                )
+                .frame(maxWidth: 170)
+            }
+
+            if viewModel.amountInput.isEmpty && viewModel.showAllConversions {
+                Label("Enter an amount in Convert mode to unlock all conversions.", systemImage: "info.circle")
+                    .font(.subheadline)
+                    .foregroundStyle(DesignPalette.mutedInk)
+            }
+
+            Group {
+                if viewModel.showAllConversions {
+                    CurrencyConversionListView(
+                        conversions: viewModel.allConversions,
+                        baseCurrency: viewModel.baseCurrency,
+                        amountValue: viewModel.amountValue
+                    )
+                } else {
+                    AutomaticExchangeRatesView(
+                        automaticExchangeRates: viewModel.automaticExchangeRates,
+                        selectedCurrency: viewModel.baseCurrency
+                    )
+                }
             }
         }
         .cardStyle()
@@ -372,22 +435,16 @@ struct CurrencyConvertView: View {
         .cardStyle()
     }
 
-    private var ratesSection: some View {
-        Group {
-            if viewModel.showAllConversions {
-                CurrencyConversionListView(
-                    conversions: viewModel.allConversions,
-                    baseCurrency: viewModel.baseCurrency,
-                    amountValue: viewModel.amountValue
-                )
-            } else {
-                AutomaticExchangeRatesView(
-                    automaticExchangeRates: viewModel.automaticExchangeRates,
-                    selectedCurrency: viewModel.baseCurrency
-                )
+    private var workspacePicker: some View {
+        Picker("Workspace", selection: $selectedWorkspace) {
+            ForEach(ConverterWorkspace.allCases) { workspace in
+                Text(workspace.title)
+                    .tag(workspace)
             }
         }
-        .cardStyle()
+        .pickerStyle(.segmented)
+        .padding(6)
+        .background(Color.white.opacity(0.58), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     private var rateBadgeText: String {
