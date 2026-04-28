@@ -151,6 +151,7 @@ struct CurrencyConvertView: View {
     @FocusState private var isKeyboardFocused: Bool
     @State private var showSettings = false
     @State private var hasLoadedStoredDefaults = false
+    @State private var showAdvancedControls = false
     @State private var selectedWorkspace: ConverterWorkspace = .convert
     @AppStorage("defaultBaseCurrency") private var defaultBaseCurrency = CurrencyCatalog.supported[0].code
     @AppStorage("defaultTargetCurrency") private var defaultTargetCurrency = CurrencyCatalog.supported[1].code
@@ -289,13 +290,19 @@ struct CurrencyConvertView: View {
 
     private var converterSection: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("Conversion Setup")
-                .font(.system(.title3, design: .rounded, weight: .semibold))
-                .foregroundStyle(DesignPalette.ink)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Convert")
+                    .font(.system(.title3, design: .rounded, weight: .semibold))
+                    .foregroundStyle(DesignPalette.ink)
+
+                Text("Pick a pair, enter an amount, and track the result from the fixed bar below.")
+                    .font(.subheadline)
+                    .foregroundStyle(DesignPalette.mutedInk)
+            }
 
             ExchangeRatePickerView(
-                title: "You have",
-                subtitle: "Select the base currency for fresh live rates.",
+                title: "From",
+                subtitle: "Base currency",
                 currencies: CurrencyCatalog.supported,
                 selectedCurrencyCode: $viewModel.baseCurrencyCode
             )
@@ -318,37 +325,53 @@ struct CurrencyConvertView: View {
             .accessibilityHint("Switches the base and target currencies")
 
             CurrencyPickerView(
-                title: "Convert to",
-                subtitle: "Choose the output currency for the main result card.",
+                title: "To",
+                subtitle: "Target currency",
                 currencies: CurrencyCatalog.supported.filter { $0.code != viewModel.baseCurrencyCode },
                 selectedCurrencyCode: $viewModel.targetCurrencyCode
             )
 
-            ExchangeRateInputView(
-                customExchangeRate: $viewModel.customExchangeRate,
-                targetCurrency: viewModel.targetCurrency.code
-            )
-
-            HStack(spacing: 10) {
-                ResetButton {
-                    isKeyboardFocused = false
-                    viewModel.reset(
-                        baseCurrencyCode: defaultBaseCurrency,
-                        targetCurrencyCode: defaultTargetCurrency,
-                        showsAllConversions: showAllConversionsByDefault
+            DisclosureGroup(isExpanded: $showAdvancedControls) {
+                VStack(spacing: 14) {
+                    ExchangeRateInputView(
+                        customExchangeRate: $viewModel.customExchangeRate,
+                        targetCurrency: viewModel.targetCurrency.code
                     )
-                }
 
-                Button {
-                    Task {
-                        await viewModel.fetchRates()
+                    HStack(spacing: 10) {
+                        ResetButton {
+                            isKeyboardFocused = false
+                            viewModel.reset(
+                                baseCurrencyCode: defaultBaseCurrency,
+                                targetCurrencyCode: defaultTargetCurrency,
+                                showsAllConversions: showAllConversionsByDefault
+                            )
+                        }
+
+                        Button {
+                            Task {
+                                await viewModel.fetchRates()
+                            }
+                        } label: {
+                            Label("Refresh", systemImage: "arrow.clockwise")
+                        }
+                        .buttonStyle(SecondaryCapsuleButtonStyle())
+                        .disabled(viewModel.isLoading)
                     }
-                } label: {
-                    Label("Refresh", systemImage: "arrow.clockwise")
                 }
-                .buttonStyle(SecondaryCapsuleButtonStyle())
-                .disabled(viewModel.isLoading)
+                .padding(.top, 12)
+            } label: {
+                HStack {
+                    Label("Advanced controls", systemImage: "slider.horizontal.3")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(DesignPalette.ink)
+                    Spacer()
+                    Text(showAdvancedControls ? "Hide" : "Show")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(DesignPalette.mutedInk)
+                }
             }
+            .tint(DesignPalette.accentStrong)
         }
         .cardStyle()
     }
