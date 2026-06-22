@@ -38,13 +38,13 @@ struct CurrencyPickerView: View {
                                         .font(.subheadline.weight(.bold))
                                     Text(currency.symbol)
                                         .font(.caption.weight(.semibold))
-                                        .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.86) : DesignPalette.mutedInk)
+                                        .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.86) : DesignPalette.ink)
                                 }
                             }
 
                             Text(currency.name)
                                 .font(.caption)
-                                .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.92) : DesignPalette.mutedInk)
+                                .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.92) : DesignPalette.ink)
                                 .lineLimit(2)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -69,7 +69,7 @@ private struct CurrencyChipButtonStyle: ButtonStyle {
             .foregroundStyle(isSelected ? Color.white : DesignPalette.ink)
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(isSelected ? DesignPalette.accentStrong : DesignPalette.elevatedSurfaceStrong)
+                    .fill(isSelected ? DesignPalette.accentStrong : DesignPalette.surface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)

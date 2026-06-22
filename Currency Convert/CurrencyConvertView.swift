@@ -273,7 +273,7 @@ struct CurrencyConvertView: View {
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color.white.opacity(0.78))
+                .fill(DesignPalette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
                         .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
@@ -514,10 +514,10 @@ struct CurrencyConvertView: View {
             .lineLimit(1)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
-            .background(DesignPalette.accentSoft.opacity(0.85), in: Capsule())
+            .background(DesignPalette.accentSoft.opacity(0.95), in: Capsule())
             .overlay(
                 Capsule()
-                    .stroke(DesignPalette.stroke.opacity(0.75), lineWidth: 1)
+                    .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
             )
     }
 
@@ -585,7 +585,7 @@ struct CurrencyConvertView: View {
         .padding(.vertical, 14)
         .background(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(Color.white.opacity(0.94))
+                .fill(DesignPalette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 24, style: .continuous)
                         .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
