@@ -105,6 +105,6 @@ struct CurrencyFlagDetailView: View {
             .foregroundStyle(.white)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color.white.opacity(0.16), in: Capsule())
+            .background(DesignPalette.surface.opacity(0.16), in: Capsule())
     }
 }

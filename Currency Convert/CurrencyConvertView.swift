@@ -258,7 +258,11 @@ struct CurrencyConvertView: View {
                             .font(.headline.weight(.semibold))
                             .foregroundStyle(DesignPalette.ink)
                             .padding(12)
-                            .background(Color.white.opacity(0.84), in: Circle())
+                            .background(DesignPalette.surface, in: Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
+                            )
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Open settings")
@@ -496,7 +500,8 @@ struct CurrencyConvertView: View {
         }
         .pickerStyle(.segmented)
         .padding(6)
-        .background(Color.white.opacity(0.58), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(DesignPalette.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: DesignPalette.shadow.opacity(0.14), radius: 12, x: 0, y: 4)
     }
 
     private var rateBadgeText: String {
@@ -512,12 +517,12 @@ struct CurrencyConvertView: View {
             .font(.caption.weight(.semibold))
             .foregroundStyle(DesignPalette.ink)
             .lineLimit(1)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
-            .background(DesignPalette.accentSoft.opacity(0.95), in: Capsule())
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(DesignPalette.surface, in: Capsule())
             .overlay(
                 Capsule()
-                    .stroke(DesignPalette.stroke.opacity(0.95), lineWidth: 1)
+                    .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
             )
     }
 
