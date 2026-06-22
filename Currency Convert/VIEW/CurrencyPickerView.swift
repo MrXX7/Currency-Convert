@@ -23,13 +23,13 @@ struct CurrencyPickerView: View {
                 .font(.subheadline)
                 .foregroundStyle(DesignPalette.mutedInk)
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 108), spacing: 12)], spacing: 12) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 14)], spacing: 14) {
                 ForEach(currencies) { currency in
                     Button {
                         selectedCurrencyCode = currency.code
                     } label: {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(alignment: .center, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(alignment: .center, spacing: 10) {
                                 Text(currency.flag)
                                     .font(.title3)
 
@@ -38,17 +38,17 @@ struct CurrencyPickerView: View {
                                         .font(.subheadline.weight(.bold))
                                     Text(currency.symbol)
                                         .font(.caption.weight(.semibold))
-                                        .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.86) : DesignPalette.ink)
+                                        .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.88) : DesignPalette.mutedInk)
                                 }
                             }
 
                             Text(currency.name)
                                 .font(.caption)
-                                .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.92) : DesignPalette.ink)
+                                .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.92) : DesignPalette.mutedInk)
                                 .lineLimit(2)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(12)
+                        .padding(14)
                     }
                     .buttonStyle(CurrencyChipButtonStyle(isSelected: selectedCurrencyCode == currency.code))
                 }

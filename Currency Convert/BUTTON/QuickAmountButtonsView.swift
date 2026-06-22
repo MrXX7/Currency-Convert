@@ -15,12 +15,12 @@ struct PrimaryCapsuleButtonStyle: ButtonStyle {
         configuration.label
             .font(.subheadline.weight(.semibold))
             .foregroundStyle(isProminent ? Color.white : DesignPalette.ink)
-            .padding(.vertical, 11)
-            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
             .frame(maxWidth: .infinity)
             .background(
                 Capsule()
-                    .fill(isProminent ? DesignPalette.accentStrong : DesignPalette.elevatedSurfaceStrong)
+                    .fill(isProminent ? DesignPalette.accentStrong : DesignPalette.surface)
             )
             .overlay(
                 Capsule()
@@ -56,12 +56,12 @@ struct QuickAmountPickerView: View {
     @Binding var amountInput: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Quick Select")
                 .font(.headline)
                 .foregroundStyle(DesignPalette.ink)
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 10)], spacing: 10) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 84), spacing: 12)], spacing: 12) {
                 ForEach(quickAmounts, id: \.self) { amount in
                     Button(amount) {
                         amountInput = amount
