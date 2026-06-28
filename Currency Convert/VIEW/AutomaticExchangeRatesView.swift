@@ -23,9 +23,17 @@ struct AutomaticExchangeRatesView: View {
                 .font(.subheadline)
                 .foregroundStyle(DesignPalette.mutedInk)
 
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(automaticExchangeRates) { rate in
-                    VStack(alignment: .leading, spacing: 8) {
+            if automaticExchangeRates.isEmpty {
+                ContentUnavailableView(
+                    "No rates available",
+                    systemImage: "chart.bar.xaxis",
+                    description: Text("Try refreshing or check your network connection.")
+                )
+                .padding(.top, 12)
+            } else {
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(automaticExchangeRates) { rate in
+                        VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text(rate.currency.flag)
                             Text(rate.currency.code)

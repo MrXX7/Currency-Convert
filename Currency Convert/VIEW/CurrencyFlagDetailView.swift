@@ -53,6 +53,22 @@ struct CurrencyFlagDetailView: View {
                                     .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
                                     .padding(.horizontal, 2)
                                     .tag(index)
+                            } else {
+                                VStack(spacing: 12) {
+                                    Image(systemName: "photo")
+                                        .font(.system(size: 42))
+                                        .foregroundStyle(DesignPalette.mutedInk)
+
+                                    Text("Missing preview for \(imageName)")
+                                        .font(.subheadline)
+                                        .multilineTextAlignment(.center)
+                                        .foregroundStyle(DesignPalette.mutedInk)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: 290)
+                                .padding(18)
+                                .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                                .padding(.horizontal, 2)
+                                .tag(index)
                             }
                         }
                     }
