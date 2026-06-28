@@ -310,7 +310,7 @@ struct CurrencyConvertView: View {
                     .foregroundStyle(DesignPalette.mutedInk)
             }
 
-            ExchangeRatePickerView(
+            CurrencyPickerView(
                 title: "From",
                 subtitle: "Base currency",
                 currencies: CurrencyCatalog.supported,
