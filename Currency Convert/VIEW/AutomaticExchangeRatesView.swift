@@ -34,36 +34,37 @@ struct AutomaticExchangeRatesView: View {
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(automaticExchangeRates) { rate in
                         VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text(rate.currency.flag)
-                            Text(rate.currency.code)
-                                .font(.headline.weight(.bold))
-                                .foregroundStyle(DesignPalette.ink)
+                            HStack {
+                                Text(rate.currency.flag)
+                                Text(rate.currency.code)
+                                    .font(.headline.weight(.bold))
+                                    .foregroundStyle(DesignPalette.ink)
+                            }
+
+                            Text(String(format: "%.4f", rate.rate))
+                                .font(.title3.weight(.bold))
+                                .foregroundStyle(DesignPalette.accentStrong)
+
+                            Text(rate.currency.name)
+                                .font(.caption)
+                                .foregroundStyle(DesignPalette.mutedInk)
+
+                            Text(insightText(for: rate.rate))
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(DesignPalette.accentStrong)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 6)
+                                .background(DesignPalette.accentSoft.opacity(0.8), in: Capsule())
                         }
-
-                        Text(String(format: "%.4f", rate.rate))
-                            .font(.title3.weight(.bold))
-                            .foregroundStyle(DesignPalette.accentStrong)
-
-                        Text(rate.currency.name)
-                            .font(.caption)
-                            .foregroundStyle(DesignPalette.mutedInk)
-
-                        Text(insightText(for: rate.rate))
-                            .font(.caption2.weight(.semibold))
-                            .foregroundStyle(DesignPalette.accentStrong)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 6)
-                            .background(DesignPalette.accentSoft.opacity(0.8), in: Capsule())
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(14)
+                        .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
+                        )
+                        .shadow(color: DesignPalette.shadow, radius: 8, x: 0, y: 4)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(14)
-                    .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
-                    )
-                    .shadow(color: DesignPalette.shadow, radius: 8, x: 0, y: 4)
                 }
             }
         }
