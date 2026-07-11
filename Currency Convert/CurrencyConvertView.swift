@@ -484,25 +484,43 @@ struct CurrencyConvertView: View {
                 isManualRate: !viewModel.customExchangeRate.isEmpty
             )
 
-            if let errorMessage = viewModel.errorMessage {
-                Label(errorMessage, systemImage: "wifi.exclamationmark")
-                    .font(.subheadline)
-                    .foregroundStyle(viewModel.rateSource == .cache ? DesignPalette.accentStrong : Color.red.opacity(0.85))
-            } else if viewModel.isLoading {
-                HStack(spacing: 10) {
-                    ProgressView()
-                        .tint(DesignPalette.accentStrong)
-                    Text("Updating rates...")
-                        .font(.subheadline)
-                        .foregroundStyle(DesignPalette.mutedInk)
-                }
-            } else if let lastUpdated = viewModel.lastUpdated {
-                Label(lastUpdatedText(from: lastUpdated), systemImage: "clock")
-                    .font(.subheadline)
-                    .foregroundStyle(DesignPalette.mutedInk)
-            }
+            rateStatusRow
         }
         .cardStyle()
+    }
+
+    @ViewBuilder
+    private var rateStatusRow: some View {
+        if let errorMessage = viewModel.errorMessage {
+            Label(errorMessage, systemImage: viewModel.rateSource == .cache ? "internaldrive.fill" : "wifi.exclamationmark")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(viewModel.rateSource == .cache ? DesignPalette.accentStrong : Color.red.opacity(0.85))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+                .background(statusBackgroundColor, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        } else if viewModel.isLoading {
+            HStack(spacing: 10) {
+                ProgressView()
+                    .tint(DesignPalette.accentStrong)
+                Text("Updating rates...")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(DesignPalette.mutedInk)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(12)
+            .background(DesignPalette.accentSoft.opacity(0.72), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        } else if let lastUpdated = viewModel.lastUpdated {
+            Label(lastUpdatedText(from: lastUpdated), systemImage: "clock")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DesignPalette.mutedInk)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+                .background(DesignPalette.elevatedSurface.opacity(0.72), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        }
+    }
+
+    private var statusBackgroundColor: Color {
+        viewModel.rateSource == .cache ? DesignPalette.accentSoft.opacity(0.72) : Color.red.opacity(0.08)
     }
 
     private var workspacePicker: some View {

@@ -55,44 +55,58 @@ struct CurrencyPickerView: View {
                     .stroke(DesignPalette.stroke.opacity(0.7), lineWidth: 1)
             )
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 14)], spacing: 14) {
-                ForEach(filteredCurrencies) { currency in
-                    Button {
-                        selectedCurrencyCode = currency.code
-                    } label: {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack(alignment: .center, spacing: 10) {
-                                Text(currency.flag)
-                                    .font(.title3)
+            if filteredCurrencies.isEmpty {
+                Label("No matching currencies", systemImage: "magnifyingglass")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(DesignPalette.mutedInk)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(14)
+                    .background(DesignPalette.elevatedSurface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(DesignPalette.stroke.opacity(0.7), lineWidth: 1)
+                    )
+                    .accessibilityHint("Try searching by currency code, name, or region")
+            } else {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 14)], spacing: 14) {
+                    ForEach(filteredCurrencies) { currency in
+                        Button {
+                            selectedCurrencyCode = currency.code
+                        } label: {
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack(alignment: .center, spacing: 10) {
+                                    Text(currency.flag)
+                                        .font(.title3)
 
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(currency.code)
-                                        .font(.subheadline.weight(.bold))
-                                    Text(currency.symbol)
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.88) : DesignPalette.mutedInk)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(currency.code)
+                                            .font(.subheadline.weight(.bold))
+                                        Text(currency.symbol)
+                                            .font(.caption.weight(.semibold))
+                                            .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.88) : DesignPalette.mutedInk)
+                                    }
+
+                                    Spacer(minLength: 8)
+
+                                    if isSelected(currency.code) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .font(.subheadline.weight(.semibold))
+                                            .foregroundStyle(.white.opacity(0.92))
+                                    }
                                 }
 
-                                Spacer(minLength: 8)
-
-                                if isSelected(currency.code) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.subheadline.weight(.semibold))
-                                        .foregroundStyle(.white.opacity(0.92))
-                                }
+                                Text(currency.name)
+                                    .font(.caption)
+                                    .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.92) : DesignPalette.mutedInk)
+                                    .lineLimit(2)
                             }
-
-                            Text(currency.name)
-                                .font(.caption)
-                                .foregroundStyle(isSelected(currency.code) ? .white.opacity(0.92) : DesignPalette.mutedInk)
-                                .lineLimit(2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(14)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(14)
+                        .buttonStyle(CurrencyChipButtonStyle(isSelected: selectedCurrencyCode == currency.code))
+                        .accessibilityLabel("\(currency.name), \(currency.code)")
+                        .accessibilityHint(isSelected(currency.code) ? "Selected currency" : "Selects \(currency.name)")
                     }
-                    .buttonStyle(CurrencyChipButtonStyle(isSelected: selectedCurrencyCode == currency.code))
-                    .accessibilityLabel("\(currency.name), \(currency.code)")
-                    .accessibilityHint(isSelected(currency.code) ? "Selected currency" : "Selects \(currency.name)")
                 }
             }
         }
