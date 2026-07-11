@@ -86,11 +86,21 @@ final class CurrencyConverterViewModel: ObservableObject {
     }
 
     func fetchRates() async {
+        let requestedBaseCurrencyCode = baseCurrencyCode
         isLoading = true
         errorMessage = nil
+        defer {
+            if requestedBaseCurrencyCode == baseCurrencyCode {
+                isLoading = false
+            }
+        }
 
         do {
-            let snapshot = try await ExchangeRateFetcher.fetchRates(baseCurrencyCode: baseCurrencyCode)
+            let snapshot = try await ExchangeRateFetcher.fetchRates(baseCurrencyCode: requestedBaseCurrencyCode)
+            guard requestedBaseCurrencyCode == baseCurrencyCode else {
+                return
+            }
+
             exchangeRates = snapshot.rates
             lastUpdated = snapshot.updateTimestamp
             rateSource = snapshot.source
@@ -100,11 +110,15 @@ final class CurrencyConverterViewModel: ObservableObject {
                 targetCurrencyCode = firstAvailableTarget(for: baseCurrencyCode)
             }
         } catch {
+            guard requestedBaseCurrencyCode == baseCurrencyCode else {
+                return
+            }
+
+            exchangeRates = [:]
+            lastUpdated = nil
             errorMessage = error.localizedDescription
             rateSource = .live
         }
-
-        isLoading = false
     }
 
     func normalizeSelections() {

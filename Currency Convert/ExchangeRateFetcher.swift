@@ -22,6 +22,7 @@ struct ExchangeRateSnapshot {
 enum ExchangeRateError: LocalizedError {
     case invalidResponse
     case missingRates
+    case unsuccessfulFeed
 
     var errorDescription: String? {
         switch self {
@@ -29,13 +30,16 @@ enum ExchangeRateError: LocalizedError {
             return "Could not load exchange rates right now."
         case .missingRates:
             return "The rates feed returned incomplete data."
+        case .unsuccessfulFeed:
+            return "The rates feed could not provide data for this currency."
         }
     }
 }
 
 enum ExchangeRateFetcher {
     static func fetchRates(baseCurrencyCode: String) async throws -> ExchangeRateSnapshot {
-        let url = URL(string: "https://open.er-api.com/v6/latest/\(baseCurrencyCode)")!
+        let normalizedBaseCode = baseCurrencyCode.uppercased()
+        let url = URL(string: "https://open.er-api.com/v6/latest/\(normalizedBaseCode)")!
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
 
@@ -44,21 +48,29 @@ enum ExchangeRateFetcher {
             }
 
             let decoded = try JSONDecoder().decode(ExchangeRatesResponse.self, from: data)
-            guard !decoded.rates.isEmpty else {
+            guard decoded.result == nil || decoded.result == "success" else {
+                throw ExchangeRateError.unsuccessfulFeed
+            }
+
+            let validRates = decoded.rates.filter { _, rate in
+                rate.isFinite && rate > 0
+            }
+
+            guard !validRates.isEmpty else {
                 throw ExchangeRateError.missingRates
             }
 
             let snapshot = ExchangeRateSnapshot(
-                baseCurrencyCode: decoded.baseCode ?? baseCurrencyCode,
-                rates: decoded.rates,
+                baseCurrencyCode: decoded.baseCode ?? normalizedBaseCode,
+                rates: validRates,
                 updateTimestamp: parsedDate(from: decoded.updateTimeUTC),
                 source: .live
             )
 
-            store(snapshot: snapshot, for: baseCurrencyCode)
+            store(snapshot: snapshot, for: normalizedBaseCode)
             return snapshot
         } catch {
-            if let cachedSnapshot = cachedSnapshot(for: baseCurrencyCode) {
+            if let cachedSnapshot = cachedSnapshot(for: normalizedBaseCode) {
                 return cachedSnapshot
             }
 
