@@ -36,6 +36,7 @@ final class CurrencyConverterViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var lastUpdated: Date?
     @Published var rateSource: ExchangeRateSource = .live
+    private var loadingBaseCurrencyCode: String?
 
     let quickAmounts = ["5", "10", "25", "50", "100", "250", "500", "1000"]
 
@@ -87,9 +88,18 @@ final class CurrencyConverterViewModel: ObservableObject {
 
     func fetchRates() async {
         let requestedBaseCurrencyCode = baseCurrencyCode
+        guard loadingBaseCurrencyCode != requestedBaseCurrencyCode else {
+            return
+        }
+
+        loadingBaseCurrencyCode = requestedBaseCurrencyCode
         isLoading = true
         errorMessage = nil
         defer {
+            if loadingBaseCurrencyCode == requestedBaseCurrencyCode {
+                loadingBaseCurrencyCode = nil
+            }
+
             if requestedBaseCurrencyCode == baseCurrencyCode {
                 isLoading = false
             }
