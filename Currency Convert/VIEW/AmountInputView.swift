@@ -11,6 +11,7 @@ import SwiftUI
 struct AmountInputView: View {
     @Binding var amountInput: String
     let currency: CurrencyDefinition
+    let rateToUSD: Double
     @FocusState.Binding var isFocused: Bool
     @State private var showInputWarning: Bool = false
 
@@ -80,6 +81,14 @@ struct AmountInputView: View {
                     .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
             )
             .shadow(color: DesignPalette.shadow, radius: 10, x: 0, y: 4)
+            
+            if let inputAmount = Double(amountInput.replacingOccurrences(of: ",", with: ".")), !amountInput.isEmpty {
+                let usdValue = inputAmount * rateToUSD
+                Text("≈ $\(String(format: "%.2f", usdValue)) USD")
+                    .font(.caption)
+                    .foregroundStyle(DesignPalette.mutedInk)
+                    .padding(.top, 4)
+            }
         }
     }
 }
