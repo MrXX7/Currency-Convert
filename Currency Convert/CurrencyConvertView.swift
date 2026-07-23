@@ -28,15 +28,21 @@ private enum ConverterWorkspace: String, CaseIterable, Identifiable {
 final class CurrencyConverterViewModel: ObservableObject {
     @Published var amountInput = ""
     @Published var customExchangeRate = ""
-    @Published var baseCurrencyCode = CurrencyCatalog.supported[0].code
-    @Published var targetCurrencyCode = CurrencyCatalog.supported[1].code
+    @Published var baseCurrencyCode = CurrencyCatalog.supported.first?.code ?? "USD"
+    @Published var targetCurrencyCode = CurrencyCatalog.supported.dropFirst().first?.code ?? "EUR"
     @Published var exchangeRates: [String: Double] = [:]
     @Published var isLoading = false
     @Published var showAllConversions = false
     @Published var errorMessage: String?
     @Published var lastUpdated: Date?
     @Published var rateSource: ExchangeRateSource = .live
-    private var loadingBaseCurrencyCode: String?
+    
+    private var currentTask: Task<Void, Never>?
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter
+    }()
 
     let quickAmounts = ["5", "10", "25", "50", "100", "250", "500", "1000"]
 
@@ -73,7 +79,7 @@ final class CurrencyConverterViewModel: ObservableObject {
     }
 
     var allConversions: [ConversionResult] {
-        guard let amount = AmountConverter.decimalValue(from: amountInput) else {
+        guard let amount = amountValue else {
             return []
         }
 
@@ -85,50 +91,44 @@ final class CurrencyConverterViewModel: ObservableObject {
     var amountValue: Double? {
         AmountConverter.decimalValue(from: amountInput)
     }
+    
+    var rateToUSD: Double {
+        exchangeRates["USD"] ?? 1.0
+    }
 
     func fetchRates() async {
-        let requestedBaseCurrencyCode = baseCurrencyCode
-        guard loadingBaseCurrencyCode != requestedBaseCurrencyCode else {
-            return
+        // Cancel any existing task to prevent race conditions
+        currentTask?.cancel()
+        
+        currentTask = Task {
+            isLoading = true
+            errorMessage = nil
+            
+            do {
+                let snapshot = try await ExchangeRateFetcher.fetchRates(baseCurrencyCode: baseCurrencyCode)
+                
+                // Check if task was cancelled during network call
+                if Task.isCancelled { return }
+                
+                exchangeRates = snapshot.rates
+                lastUpdated = snapshot.updateTimestamp
+                rateSource = snapshot.source
+                errorMessage = snapshot.source == .cache ? "Showing cached exchange rates." : nil
+
+                normalizeSelections()
+            } catch {
+                if Task.isCancelled { return }
+                
+                exchangeRates = [:]
+                lastUpdated = nil
+                errorMessage = error.localizedDescription
+                rateSource = .live
+            }
+            
+            isLoading = false
         }
-
-        loadingBaseCurrencyCode = requestedBaseCurrencyCode
-        isLoading = true
-        errorMessage = nil
-        defer {
-            if loadingBaseCurrencyCode == requestedBaseCurrencyCode {
-                loadingBaseCurrencyCode = nil
-            }
-
-            if requestedBaseCurrencyCode == baseCurrencyCode {
-                isLoading = false
-            }
-        }
-
-        do {
-            let snapshot = try await ExchangeRateFetcher.fetchRates(baseCurrencyCode: requestedBaseCurrencyCode)
-            guard requestedBaseCurrencyCode == baseCurrencyCode else {
-                return
-            }
-
-            exchangeRates = snapshot.rates
-            lastUpdated = snapshot.updateTimestamp
-            rateSource = snapshot.source
-            errorMessage = snapshot.source == .cache ? "Showing cached exchange rates." : nil
-
-            if targetCurrencyCode == baseCurrencyCode {
-                targetCurrencyCode = firstAvailableTarget(for: baseCurrencyCode)
-            }
-        } catch {
-            guard requestedBaseCurrencyCode == baseCurrencyCode else {
-                return
-            }
-
-            exchangeRates = [:]
-            lastUpdated = nil
-            errorMessage = error.localizedDescription
-            rateSource = .live
-        }
+        
+        await currentTask?.value
     }
 
     func normalizeSelections() {
@@ -167,6 +167,10 @@ final class CurrencyConverterViewModel: ObservableObject {
     private func firstAvailableTarget(for code: String) -> String {
         CurrencyCatalog.supported.first(where: { $0.code != code })?.code ?? code
     }
+    
+    func lastUpdatedText(from date: Date) -> String {
+        return "Rates updated \(Self.relativeFormatter.localizedString(for: date, relativeTo: .now))"
+    }
 }
 
 struct CurrencyConvertView: View {
@@ -177,8 +181,9 @@ struct CurrencyConvertView: View {
     @State private var hasLoadedStoredDefaults = false
     @State private var showAdvancedControls = false
     @State private var selectedWorkspace: ConverterWorkspace = .convert
-    @AppStorage("defaultBaseCurrency") private var defaultBaseCurrency = CurrencyCatalog.supported[0].code
-    @AppStorage("defaultTargetCurrency") private var defaultTargetCurrency = CurrencyCatalog.supported[1].code
+    
+    @AppStorage("defaultBaseCurrency") private var defaultBaseCurrency = CurrencyCatalog.supported.first?.code ?? "USD"
+    @AppStorage("defaultTargetCurrency") private var defaultTargetCurrency = CurrencyCatalog.supported.dropFirst().first?.code ?? "EUR"
     @AppStorage("showAllConversionsByDefault") private var showAllConversionsByDefault = false
     @AppStorage("defaultWorkspace") private var defaultWorkspaceRawValue = ConverterWorkspace.convert.rawValue
     @AppStorage("showAdvancedControlsByDefault") private var showAdvancedControlsByDefault = false
@@ -187,7 +192,7 @@ struct CurrencyConvertView: View {
         NavigationStack {
             ZStack {
                 DesignPalette.heroGradient
-                .ignoresSafeArea()
+                    .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20) {
@@ -203,7 +208,7 @@ struct CurrencyConvertView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
-                    .padding(.bottom, 124)
+                    .padding(.bottom, 100) // Adjusted padding
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .refreshable {
@@ -217,7 +222,6 @@ struct CurrencyConvertView: View {
             await viewModel.fetchRates()
         }
         .task(id: viewModel.baseCurrencyCode) {
-            viewModel.normalizeSelections()
             await viewModel.fetchRates()
         }
         .onChange(of: viewModel.amountInput) { _, newValue in
@@ -265,7 +269,7 @@ struct CurrencyConvertView: View {
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
                         .foregroundStyle(DesignPalette.ink)
 
-                    Text("Clean, fast conversion with live exchange data and a clearer layout.")
+                    Text("Clean, fast conversion with live exchange data.")
                         .font(.subheadline)
                         .foregroundStyle(DesignPalette.ink.opacity(0.78))
                 }
@@ -288,7 +292,6 @@ struct CurrencyConvertView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Open settings")
-                    .accessibilityHint("Adjust defaults and appearance")
 
                     DarkModeToggleButton(isDarkMode: $isDarkMode)
                 }
@@ -327,7 +330,7 @@ struct CurrencyConvertView: View {
                     .font(.system(.title3, design: .rounded, weight: .semibold))
                     .foregroundStyle(DesignPalette.ink)
 
-                Text("Pick a pair, enter an amount, and track the result from the fixed bar below.")
+                Text("Pick a pair and enter an amount.")
                     .font(.subheadline)
                     .foregroundStyle(DesignPalette.mutedInk)
             }
@@ -344,6 +347,7 @@ struct CurrencyConvertView: View {
             AmountInputView(
                 amountInput: $viewModel.amountInput,
                 currency: viewModel.baseCurrency,
+                rateToUSD: viewModel.rateToUSD,
                 isFocused: $isKeyboardFocused
             )
 
@@ -352,10 +356,9 @@ struct CurrencyConvertView: View {
                 viewModel.swapCurrencies()
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             } label: {
-                Label("Swap Base and Target", systemImage: "arrow.up.arrow.down.circle.fill")
+                Label("Swap Currencies", systemImage: "arrow.up.arrow.down.circle.fill")
             }
             .buttonStyle(SecondaryCapsuleButtonStyle())
-            .accessibilityHint("Switches the base and target currencies")
 
             CurrencyPickerView(
                 title: "To",
@@ -395,7 +398,7 @@ struct CurrencyConvertView: View {
                 .padding(.top, 12)
             } label: {
                 HStack {
-                    Label("Advanced controls", systemImage: "slider.horizontal.3")
+                    Text("Advanced Options")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(DesignPalette.ink)
                     Spacer()
@@ -417,7 +420,7 @@ struct CurrencyConvertView: View {
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundStyle(DesignPalette.ink)
 
-                    Text("Switch between the live rate board and all destination conversions.")
+                    Text("Live rate board and conversions.")
                         .font(.subheadline)
                         .foregroundStyle(DesignPalette.mutedInk)
                 }
@@ -432,7 +435,7 @@ struct CurrencyConvertView: View {
             }
 
             if viewModel.amountInput.isEmpty && viewModel.showAllConversions {
-                Label("Enter an amount in Convert mode to unlock all conversions.", systemImage: "info.circle")
+                Label("Enter an amount to unlock all conversions.", systemImage: "info.circle")
                     .font(.subheadline)
                     .foregroundStyle(DesignPalette.mutedInk)
             }
@@ -493,7 +496,7 @@ struct CurrencyConvertView: View {
             .padding(12)
             .background(DesignPalette.accentSoft.opacity(0.72), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         } else if let lastUpdated = viewModel.lastUpdated {
-            Label(lastUpdatedText(from: lastUpdated), systemImage: "clock")
+            Label(viewModel.lastUpdatedText(from: lastUpdated), systemImage: "clock")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DesignPalette.mutedInk)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -523,7 +526,6 @@ struct CurrencyConvertView: View {
         guard let activeRate = viewModel.activeRate else {
             return "--"
         }
-
         return String(format: "%.4f", activeRate)
     }
 
@@ -541,12 +543,6 @@ struct CurrencyConvertView: View {
             )
     }
 
-    private func lastUpdatedText(from date: Date) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .short
-        return "Rates updated \(formatter.localizedString(for: date, relativeTo: .now))"
-    }
-
     private var compactResultBar: some View {
         HStack(alignment: .center, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
@@ -559,7 +555,6 @@ struct CurrencyConvertView: View {
                     .foregroundStyle(DesignPalette.accentStrong)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.convertedAmount)
 
                 Text(compactResultSubtitle)
                     .font(.caption)
@@ -598,8 +593,6 @@ struct CurrencyConvertView: View {
                     .background(DesignPalette.accentSoft.opacity(0.9), in: Circle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Copy conversion result")
-            .accessibilityHint("Copies the current converted amount")
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 14)
@@ -612,7 +605,6 @@ struct CurrencyConvertView: View {
                 )
         )
         .shadow(color: DesignPalette.shadow, radius: 16, x: 0, y: 8)
-        .accessibilityElement(children: .combine)
     }
 
     private var compactResultSubtitle: String {
@@ -620,7 +612,6 @@ struct CurrencyConvertView: View {
         if !viewModel.customExchangeRate.isEmpty {
             return "\(pair) · Manual rate"
         }
-
         return viewModel.rateSource == .cache ? "\(pair) · Cached" : "\(pair) · Live"
     }
 
@@ -628,15 +619,11 @@ struct CurrencyConvertView: View {
         if !viewModel.customExchangeRate.isEmpty {
             return "Manual"
         }
-
         return viewModel.rateSource == .cache ? "Cached" : "Live"
     }
 
     private func applyStoredDefaultsIfNeeded() {
-        guard !hasLoadedStoredDefaults else {
-            return
-        }
-
+        guard !hasLoadedStoredDefaults else { return }
         hasLoadedStoredDefaults = true
         applyStoredDefaults(clearInputs: false)
     }
