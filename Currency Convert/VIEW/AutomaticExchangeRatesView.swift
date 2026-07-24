@@ -11,73 +11,119 @@ struct AutomaticExchangeRatesView: View {
     let automaticExchangeRates: [CurrencyRate]
     let selectedCurrency: CurrencyDefinition
 
-    private let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    private let columns = [
+        GridItem(.flexible(), spacing: 14),
+        GridItem(.flexible(), spacing: 14)
+    ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("\(selectedCurrency.code) Rate Board")
-                .font(.system(.title3, design: .rounded, weight: .semibold))
-                .foregroundStyle(DesignPalette.ink)
-
-            Text("Live indicative rates from the selected base currency.")
-                .font(.subheadline)
-                .foregroundStyle(DesignPalette.mutedInk)
-
+        VStack(alignment: .leading, spacing: 20) {
+            headerSection
+            
             if automaticExchangeRates.isEmpty {
-                ContentUnavailableView(
-                    "No rates available",
-                    systemImage: "chart.bar.xaxis",
-                    description: Text("Try refreshing or check your network connection.")
-                )
-                .padding(.top, 12)
+                emptyStateView
             } else {
-                LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(automaticExchangeRates) { rate in
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(rate.currency.flag)
-                                Text(rate.currency.code)
-                                    .font(.headline.weight(.bold))
-                                    .foregroundStyle(DesignPalette.ink)
-                            }
-
-                            Text(String(format: "%.4f", rate.rate))
-                                .font(.title3.weight(.bold))
-                                .foregroundStyle(DesignPalette.accentStrong)
-
-                            Text(rate.currency.name)
-                                .font(.caption)
-                                .foregroundStyle(DesignPalette.mutedInk)
-
-                            Text(insightText(for: rate.rate))
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(DesignPalette.accentStrong)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 6)
-                                .background(DesignPalette.accentSoft.opacity(0.8), in: Capsule())
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(14)
-                        .background(DesignPalette.elevatedSurfaceStrong, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .stroke(DesignPalette.stroke.opacity(0.9), lineWidth: 1)
-                        )
-                        .shadow(color: DesignPalette.shadow, radius: 8, x: 0, y: 4)
-                    }
-                }
+                rateGrid
             }
         }
     }
+    
+    // MARK: - Subviews
+    
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("\(selectedCurrency.code) Rate Board")
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(DesignPalette.ink)
+                
+                Spacer()
+                
+                Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(DesignPalette.accentStrong)
+            }
 
-    private func insightText(for rate: Double) -> String {
-        switch rate {
-        case 0..<0.9:
-            return "Below parity"
-        case 0.9...1.1:
-            return "Near parity"
-        default:
-            return "Above parity"
+            Text("Live indicative rates from your base currency.")
+                .font(.subheadline)
+                .foregroundStyle(DesignPalette.mutedInk)
+        }
+    }
+    
+    private var rateGrid: some View {
+        LazyVGrid(columns: columns, spacing: 14) {
+            ForEach(automaticExchangeRates) { rate in
+                RateCard(rate: rate)
+            }
+        }
+    }
+    
+    private var emptyStateView: some View {
+        ContentUnavailableView {
+            Label("No rates available", systemImage: "chart.bar.xaxis")
+        } description: {
+            Text("Try refreshing or check your network connection.")
+        }
+        .padding(.vertical, 40)
+        .background(DesignPalette.surface.opacity(0.5), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+}
+
+// MARK: - Helper Views
+
+private struct RateCard: View {
+    let rate: CurrencyRate
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Text(rate.currency.flag)
+                    .font(.title3)
+                Text(rate.currency.code)
+                    .font(.system(.subheadline, design: .rounded, weight: .bold))
+                    .foregroundStyle(DesignPalette.ink)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(format: "%.4f", rate.rate))
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(DesignPalette.accentStrong)
+                
+                Text(rate.currency.name)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(DesignPalette.mutedInk)
+                    .lineLimit(1)
+            }
+
+            insightBadge(for: rate.rate)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(DesignPalette.surface, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(DesignPalette.stroke.opacity(0.8), lineWidth: 1)
+        )
+        .shadow(color: DesignPalette.shadow.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+    
+    private func insightBadge(for rateValue: Double) -> some View {
+        let insight = getInsight(for: rateValue)
+        return Text(insight.text)
+            .font(.system(size: 10, weight: .bold, design: .rounded))
+            .foregroundStyle(insight.color)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(insight.color.opacity(0.1), in: Capsule())
+    }
+    
+    private func getInsight(for rate: Double) -> (text: String, color: Color) {
+        if rate < 0.95 {
+            return ("Below Parity", .red)
+        } else if rate <= 1.05 {
+            return ("Near Parity", DesignPalette.accentStrong)
+        } else {
+            return ("Above Parity", .green)
         }
     }
 }
